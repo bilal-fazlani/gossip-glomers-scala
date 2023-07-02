@@ -1,0 +1,9 @@
+.vscode
+.bloop
+.bsp
+.metals
+*.jar
+*.j
+target
+metals.sbt
+store/
