@@ -17,7 +17,7 @@ lazy val commonSettings = Seq(
   nativeImageAgentMerge := true,
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
-  nativeImageOutput := baseDirectory.value / name.value,
+  nativeImageOutput := file(name.value + "-darwin-x86_64"),
   logo := "",
   bootstrap := {
     Process(
@@ -61,14 +61,18 @@ lazy val efficientBroadcast1 = project
           "-w",
           "broadcast",
           "--bin",
-          s"run.sh ${baseDirectory.value}/${name.value}.jar",
+          "run.sh",
           "--node-count",
           "1",
           "--time-limit",
           "5",
           "--rate",
           "10"
-        )
+        ),
+        file("."),
+        "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
+        "PROJECT_NAME" -> name.value,
+        "JAR_NAME" -> s"${name.value}.jar"
       ).!
     }
   )
@@ -88,14 +92,18 @@ lazy val efficientBroadcast2 = project
           "-w",
           "broadcast",
           "--bin",
-          s"run.sh ${baseDirectory.value}/${name.value}.jar",
+          "run.sh",
           "--node-count",
           "1",
           "--time-limit",
           "5",
           "--rate",
           "10"
-        )
+        ),
+        file("."),
+        "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
+        "PROJECT_NAME" -> name.value,
+        "JAR_NAME" -> s"${name.value}.jar"
       ).!
     }
   )
