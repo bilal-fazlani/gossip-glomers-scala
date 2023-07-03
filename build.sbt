@@ -20,6 +20,7 @@ lazy val commonSettings = Seq(
   nativeImageOutput := file(name.value + "-darwin-x86_64"),
   logo := "",
   bootstrap := {
+    publishLocal.value
     Process(
       Seq(
         "coursier",
@@ -31,29 +32,31 @@ lazy val commonSettings = Seq(
         s"${name.value}.jar"
       )
     ).!
-  }
-)
-
-usefulTasks := Seq(
-  UsefulTask(
-    "publishLocal;bootstrap",
-    "Create a fat jar file"
-  ),
-  UsefulTask(
-    "runSimulation",
-    "run maelstrom simulation to generate graalvm agent configuration"
+  },
+  usefulTasks := Seq(
+    UsefulTask(
+      "generateReflectConfig",
+      "run maelstrom simulation to generate graalvm reflect configuration"
+    ),
+    UsefulTask(
+      "nativeImage",
+      "create native image"
+    )
   )
 )
 
 lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
-lazy val runSimulation = taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
+
+lazy val generateReflectConfig =
+  taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
 
 lazy val efficientBroadcast1 = project
   .in(file("./efficient-broadcast-1"))
   .settings(
     name := "efficient-broadcast-1",
     Compile / mainClass := Some("gossipGlomers.EfficientBroadcast1"),
-    runSimulation := {
+    generateReflectConfig := {
+      bootstrap.value
       Process(
         Seq(
           "maelstrom",
@@ -84,7 +87,8 @@ lazy val efficientBroadcast2 = project
   .settings(
     name := "efficient-broadcast-2",
     Compile / mainClass := Some("gossipGlomers.EfficientBroadcast2"),
-    runSimulation := {
+    generateReflectConfig := {
+      bootstrap.value
       Process(
         Seq(
           "maelstrom",
