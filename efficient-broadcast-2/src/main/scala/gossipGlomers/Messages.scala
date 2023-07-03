@@ -6,28 +6,28 @@ import com.bilalfazlani.zioMaelstrom.protocol.*
 // In Messages
 
 @jsonDiscriminator("type")
-sealed trait FollowerInMessage derives JsonCodec
+sealed trait FollowerMessage derives JsonCodec
 
 @jsonDiscriminator("type")
-sealed trait LeaderInMessage derives JsonCodec
+sealed trait LeaderMessage derives JsonCodec
 
 @jsonHint("broadcast")
-case class Broadcast(message: Int, msg_id: MessageId) extends FollowerInMessage, LeaderInMessage, NeedsReply
+case class Broadcast(message: Int, msg_id: MessageId) extends FollowerMessage, LeaderMessage, NeedsReply
 
 @jsonHint("read")
-case class Read(msg_id: MessageId) extends FollowerInMessage, LeaderInMessage, NeedsReply
+case class Read(msg_id: MessageId) extends FollowerMessage, LeaderMessage, NeedsReply
 
 @jsonHint("topology")
 case class Topology(topology: Map[NodeId, Set[NodeId]], msg_id: MessageId)
-    extends FollowerInMessage,
-      LeaderInMessage,
+    extends FollowerMessage,
+      LeaderMessage,
       NeedsReply
 
 // In/Out Messages
 
 @jsonHint("gossip")
 case class Gossip(numbers: Set[Int], msg_id: MessageId, `type`: String = "gossip")
-    extends LeaderInMessage,
+    extends LeaderMessage,
       Sendable,
       NeedsReply derives JsonCodec
 object Gossip {
@@ -36,7 +36,7 @@ object Gossip {
 
 @jsonHint("update")
 case class Update(numbers: Set[Int], msg_id: MessageId, `type`: String = "update")
-    extends FollowerInMessage,
+    extends FollowerMessage,
       Sendable,
       NeedsReply derives JsonCodec
 

@@ -53,7 +53,7 @@ object EfficientBroadcast2 extends ZIOAppDefault {
       yield ()
     ).unit
 
-  def followerHandler(leader: NodeId) = receive[FollowerInMessage] {
+  def followerHandler(leader: NodeId) = receive[FollowerMessage] {
     case Broadcast(number, msg_id) =>
       ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(number))) *>
         (reply(BroadcastOk(msg_id)) zipPar gossipToLeader(leader, number))
@@ -67,7 +67,7 @@ object EfficientBroadcast2 extends ZIOAppDefault {
     case Topology(_, msg_id) => reply(TopologyOk(msg_id))
   }
 
-  def leaderHandler(followers: Set[NodeId]) = receive[LeaderInMessage] {
+  def leaderHandler(followers: Set[NodeId]) = receive[LeaderMessage] {
     case Broadcast(number, msg_id) =>
       ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(number))) *>
         reply(BroadcastOk(msg_id)) zipPar updateToFollowers(followers, Set(number))

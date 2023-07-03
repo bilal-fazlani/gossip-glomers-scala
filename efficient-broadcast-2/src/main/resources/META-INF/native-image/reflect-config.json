@@ -70,7 +70,7 @@
   "fields":[{"name":"derived$JsonCodec$lzy3"}]
 },
 {
-  "name":"gossipGlomers.LeaderInMessage$",
+  "name":"gossipGlomers.LeaderMessage$",
   "fields":[{"name":"derived$JsonCodec$lzy2"}]
 },
 {
