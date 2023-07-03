@@ -62,14 +62,6 @@
   "fields":[{"name":"derived$JsonCodec$lzy5"}]
 },
 {
-  "name":"gossipGlomers.EfficientBroadcast2",
-  "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
-},
-{
-  "name":"gossipGlomers.Gossip$",
-  "fields":[{"name":"derived$JsonCodec$lzy3"}]
-},
-{
   "name":"gossipGlomers.LeaderMessage$",
   "fields":[{"name":"derived$JsonCodec$lzy2"}]
 },
@@ -80,6 +72,10 @@
 {
   "name":"gossipGlomers.ReadOk$",
   "fields":[{"name":"derived$JsonCodec$lzy6"}]
+},
+{
+  "name":"gossipGlomers.Report$",
+  "fields":[{"name":"derived$JsonCodec$lzy3"}]
 },
 {
   "name":"gossipGlomers.TopologyOk$",

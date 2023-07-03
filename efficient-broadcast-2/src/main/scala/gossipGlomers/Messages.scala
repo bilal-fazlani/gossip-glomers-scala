@@ -25,14 +25,11 @@ case class Topology(topology: Map[NodeId, Set[NodeId]], msg_id: MessageId)
 
 // In/Out Messages
 
-@jsonHint("gossip")
-case class Gossip(numbers: Set[Int], msg_id: MessageId, `type`: String = "gossip")
+@jsonHint("report")
+case class Report(numbers: Set[Int], msg_id: MessageId, `type`: String = "report")
     extends LeaderMessage,
       Sendable,
       NeedsReply derives JsonCodec
-object Gossip {
-  def apply(number: Int, msg_id: MessageId): Gossip = Gossip(Set(number), msg_id)
-}
 
 @jsonHint("update")
 case class Update(numbers: Set[Int], msg_id: MessageId, `type`: String = "update")
@@ -50,6 +47,6 @@ case class ReadOk(in_reply_to: MessageId, messages: Set[Int], `type`: String = "
 
 case class TopologyOk(in_reply_to: MessageId, `type`: String = "topology_ok") extends Reply, Sendable derives JsonCodec
 
-case class GossipOk(in_reply_to: MessageId, `type`: String = "gossip_ok") extends Reply, Sendable derives JsonCodec
+case class ReportOk(in_reply_to: MessageId, `type`: String = "report_ok") extends Reply, Sendable derives JsonCodec
 
 case class UpdateOk(in_reply_to: MessageId, `type`: String = "update_ok") extends Reply, Sendable derives JsonCodec

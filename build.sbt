@@ -16,6 +16,7 @@ lazy val commonSettings = Seq(
   ).toPath,
   nativeImageAgentOutputDir := baseDirectory.value / "src" / "main" / "resources" / "META-INF" / "native-image",
   nativeImageAgentMerge := false,
+  nativeImageOptions ++= Seq("--no-fallback", "-march=native", "--verbose"),
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
   nativeImageOutput := file(name.value) / "target" / (name.value + "-darwin-x86_64"),
@@ -77,5 +78,5 @@ def exec(str: String, name: String) = Process(
   str,
   file("."),
   "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-  "PROJECT_NAME" -> name,
+  "PROJECT_NAME" -> name
 ).!
