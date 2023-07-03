@@ -74,6 +74,10 @@
   "fields":[{"name":"derived$JsonCodec$lzy2"}]
 },
 {
+  "name":"gossipGlomers.Main",
+  "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
+},
+{
   "name":"gossipGlomers.ReadOk$",
   "fields":[{"name":"derived$JsonCodec$lzy6"}]
 },

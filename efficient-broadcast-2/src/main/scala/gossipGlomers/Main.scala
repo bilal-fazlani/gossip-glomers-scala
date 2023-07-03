@@ -5,7 +5,7 @@ import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
 import com.bilalfazlani.zioMaelstrom.protocol.*
 
-object EfficientBroadcast2 extends ZIOAppDefault {
+object Main extends ZIOAppDefault {
 
   enum NodeRole:
     case Leader(followers: Set[NodeId])

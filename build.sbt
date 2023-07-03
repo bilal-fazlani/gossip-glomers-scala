@@ -6,6 +6,7 @@ logo := ""
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.0",
   organization := "com.gossip-glomers",
+  Compile / mainClass := Some("gossipGlomers.Main"),
   resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
   scalacOptions += "-Wunused:all",
   version := "0.1.0-SNAPSHOT",
@@ -14,7 +15,7 @@ lazy val commonSettings = Seq(
     "/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-20.0.1+9.1/Contents/Home"
   ).toPath,
   nativeImageAgentOutputDir := baseDirectory.value / "src" / "main" / "resources" / "META-INF" / "native-image",
-  nativeImageAgentMerge := true,
+  nativeImageAgentMerge := false,
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
   nativeImageOutput := file(name.value) / "target" / (name.value + "-darwin-x86_64"),
@@ -50,66 +51,32 @@ lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
 lazy val generateReflectConfig =
   taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
 
-lazy val efficientBroadcast1 = project
-  .in(file("./efficient-broadcast-1"))
+lazy val `efficient-broadcast-1` = project
+  .in(file("efficient-broadcast-1"))
   .settings(
-    name := "efficient-broadcast-1",
-    Compile / mainClass := Some("gossipGlomers.EfficientBroadcast1"),
     generateReflectConfig := {
       bootstrap.value
-      Process(
-        Seq(
-          "maelstrom",
-          "test",
-          "-w",
-          "broadcast",
-          "--bin",
-          "run.sh",
-          "--node-count",
-          "1",
-          "--time-limit",
-          "5",
-          "--rate",
-          "10"
-        ),
-        file("."),
-        "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-        "PROJECT_NAME" -> name.value,
-        "JAR_NAME" -> s"${name.value}.jar"
-      ).!
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
     }
   )
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-lazy val efficientBroadcast2 = project
-  .in(file("./efficient-broadcast-2"))
+lazy val `efficient-broadcast-2` = project
+  .in(file("efficient-broadcast-2"))
   .settings(
-    name := "efficient-broadcast-2",
-    Compile / mainClass := Some("gossipGlomers.EfficientBroadcast2"),
     generateReflectConfig := {
       bootstrap.value
-      Process(
-        Seq(
-          "maelstrom",
-          "test",
-          "-w",
-          "broadcast",
-          "--bin",
-          "run.sh",
-          "--node-count",
-          "1",
-          "--time-limit",
-          "5",
-          "--rate",
-          "10"
-        ),
-        file("."),
-        "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-        "PROJECT_NAME" -> name.value,
-        "JAR_NAME" -> s"${name.value}.jar"
-      ).!
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
     }
   )
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
+
+def exec(str: String, name: String) = Process(
+  str,
+  file("."),
+  "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
+  "PROJECT_NAME" -> name,
+  "JAR_NAME" -> s"${name}.jar"
+).!
