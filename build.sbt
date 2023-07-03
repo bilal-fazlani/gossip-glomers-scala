@@ -17,7 +17,7 @@ lazy val commonSettings = Seq(
   nativeImageAgentMerge := true,
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
-  nativeImageOutput := file(name.value + "-darwin-x86_64"),
+  nativeImageOutput := file(name.value) / "target" / (name.value + "-darwin-x86_64"),
   logo := "",
   bootstrap := {
     publishLocal.value
@@ -29,7 +29,7 @@ lazy val commonSettings = Seq(
         s"com.gossip-glomers:${name.value}_3:0.1.0-SNAPSHOT",
         "-f",
         "-o",
-        s"${name.value}.jar"
+        s"${name.value}/target/${name.value}.jar"
       )
     ).!
   },
