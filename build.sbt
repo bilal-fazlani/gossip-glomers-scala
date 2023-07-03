@@ -78,5 +78,4 @@ def exec(str: String, name: String) = Process(
   file("."),
   "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
   "PROJECT_NAME" -> name,
-  "JAR_NAME" -> s"${name}.jar"
 ).!
