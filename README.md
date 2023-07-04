@@ -33,14 +33,22 @@ https://zio-maelstrom.bilal-fazlani.com/
 Beyond challenge 3c, using running jar files does not work because they start too slow and the tests timeout. 
 So, I needed to compile them to native binaries using graalvm
 
-In order to create a native binary, I first run the jar file with a very small load with native image agent. 
-This captures reflection configs in `resources/META-INF/native-image/`. I then run `natveImage` command to create the native binary in `target` dir.
+There are two commands available on every solution:
+
+1. `maelstromRunAgent`
+
+    In order to create a native binary, I first run the java application with a very small load from maelstrom. Using command `maelstromRunAgent`.
+    This runs with graalvm agent and generates reflection configuration in `resources/META-INF/native-image/`
+
+2. `makeNativeImage`
+
+    After reflection configs are generated, I can now compile the application to a native binary using `makeNativeImage` command.
 
 ```bash
 #replace with the challenge you want to compile
-sbt efficient-broadcast-1/generateReflectConfig
+sbt efficient-broadcast-1/maelstromRunAgent
  
-sbt efficient-broadcast-1/nativeImage
+sbt efficient-broadcast-1/makeNativeImage
 ```
 
 I can now test the native binary with actual load using maelstrom

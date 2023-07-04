@@ -17,7 +17,7 @@ case class Follower(leader: NodeId) extends Node {
 
     case Read(msg_id) =>
       State.get.flatMap(state => reply(ReadOk(msg_id, state.oldNumbers ++ state.newNumbers)))
-     
+
     case Topology(_, msg_id) => reply(TopologyOk(msg_id))
   }
 
@@ -26,10 +26,10 @@ case class Follower(leader: NodeId) extends Node {
       val newState = state.incMessageId
       val nextMessageId = newState.currentMessageId
       (
-        leader.ask[UpdateOk](Update(newState.newNumbers, nextMessageId), 500.millis)
-          *> logInfo(s"updated leader with ${newState.newNumbers}")
+        leader.ask[ReportOk](Report(newState.newNumbers, nextMessageId), 300.millis)
+          *> logInfo(s"report ${newState.newNumbers} to leader")
       ).catchAll(e => logWarn(s"reporting failed: ${e}"))
     }
-    .repeat(Schedule.fixed(700.millis))
+    .repeat(Schedule.fixed(300.millis))
     .unit
 }

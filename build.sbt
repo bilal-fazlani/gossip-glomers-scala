@@ -16,7 +16,7 @@ lazy val commonSettings = Seq(
   ).toPath,
   nativeImageAgentOutputDir := baseDirectory.value / "src" / "main" / "resources" / "META-INF" / "native-image",
   nativeImageAgentMerge := false,
-  nativeImageOptions ++= Seq("--no-fallback", "-march=native", "--verbose"),
+  nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
   nativeImageOutput := file(name.value) / "target" / (name.value + "-darwin-x86_64"),
@@ -37,25 +37,27 @@ lazy val commonSettings = Seq(
   },
   usefulTasks := Seq(
     UsefulTask(
-      "generateReflectConfig",
-      "run maelstrom simulation to generate graalvm reflect configuration"
+      "maelstromRunAgent",
+      "run maelstrom simulation to generate graalvm reflection configuration"
     ),
     UsefulTask(
-      "nativeImage",
+      "makeNativeImage",
       "create native image"
     )
   )
 )
 
+addCommandAlias("makeNativeImage", ";bootstrap;nativeImage")
+
 lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
 
-lazy val generateReflectConfig =
+lazy val maelstromRunAgent =
   taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
 
 lazy val `efficient-broadcast-1` = project
   .in(file("efficient-broadcast-1"))
   .settings(
-    generateReflectConfig := {
+    maelstromRunAgent := {
       bootstrap.value
       exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
       stopNativeImageAgent(name.value)
@@ -67,7 +69,7 @@ lazy val `efficient-broadcast-1` = project
 lazy val `efficient-broadcast-2` = project
   .in(file("efficient-broadcast-2"))
   .settings(
-    generateReflectConfig := {
+    maelstromRunAgent := {
       bootstrap.value
       exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
       stopNativeImageAgent(name.value)
