@@ -58,6 +58,7 @@ lazy val `efficient-broadcast-1` = project
     generateReflectConfig := {
       bootstrap.value
       exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
+      stopNativeImageAgent(name.value)
     }
   )
   .enablePlugins(NativeImagePlugin)
@@ -69,6 +70,7 @@ lazy val `efficient-broadcast-2` = project
     generateReflectConfig := {
       bootstrap.value
       exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
+      stopNativeImageAgent(name.value)
     }
   )
   .enablePlugins(NativeImagePlugin)
@@ -80,3 +82,12 @@ def exec(str: String, name: String) = Process(
   "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
   "PROJECT_NAME" -> name
 ).!
+
+def stopNativeImageAgent(name: String) = {
+  Process(
+    "sh stop.sh",
+    file("."),
+    "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
+    "PROJECT_NAME" -> name
+  ).!
+}
