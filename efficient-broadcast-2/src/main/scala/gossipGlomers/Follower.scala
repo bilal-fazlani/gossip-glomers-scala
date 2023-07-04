@@ -26,10 +26,10 @@ case class Follower(leader: NodeId) extends Node {
       val newState = state.incMessageId
       val nextMessageId = newState.currentMessageId
       (
-        leader.ask[ReportOk](Report(newState.newNumbers, nextMessageId), 300.millis)
+        leader.ask[ReportOk](Report(newState.newNumbers, nextMessageId), 150.millis)
           *> logInfo(s"report ${newState.newNumbers} to leader")
       ).catchAll(e => logWarn(s"reporting failed: ${e}"))
     }
-    .repeat(Schedule.fixed(300.millis))
+    .repeat(Schedule.fixed(150.millis).jittered)
     .unit
 }

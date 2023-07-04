@@ -27,11 +27,11 @@ case class Leader(followers: Set[NodeId]) extends Node {
         val newState = state.incMessageId
         val nextMessageId = newState.currentMessageId
         (
-          ZIO.foreachPar(followers)(_.ask[UpdateOk](Update(newState.newNumbers, nextMessageId), 300.millis))
+          ZIO.foreachPar(followers)(_.ask[UpdateOk](Update(newState.newNumbers, nextMessageId), 150.millis))
             *> logInfo(s"updated all followers with ${newState.newNumbers}")
         ).catchAll(e => logWarn(s"reporting failed: ${e}"))
       }
-      .repeat(Schedule.fixed(300.millis))
+      .repeat(Schedule.fixed(150.millis).jittered)
       .unit
 
 }
