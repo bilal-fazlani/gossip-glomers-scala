@@ -26,7 +26,7 @@ object State {
     val newState = s.incMessageId
     (newState.currentMessageId, newState)
   })
-  def move[R, E, A](effect: State => ZIO[R, E, A]): ZIO[R & Synchronized[State], E, Unit] =
+  def move[R, E](effect: State => ZIO[R, E, ?]): ZIO[R & Synchronized[State], E, Unit] =
     ZIO.serviceWithZIO[Ref.Synchronized[State]](_.updateSomeZIO {
       case state if state.newNumbers.nonEmpty => effect(state) *> ZIO.succeed(state.move)
     })
