@@ -12,13 +12,11 @@ case class GenerateOk(in_reply_to: MessageId, id: String, `type`: String = "gene
 
 object Main extends ZIOAppDefault {
 
-  def handler = receive[Generate] { case Generate(msg_id) =>
-    ZIO.serviceWithZIO[Ref[Long]](_.updateAndGet(_ + 1).flatMap { newId =>
-      reply(GenerateOk(msg_id, s"$me-$newId"))
-    })
-  }
+  val newId = ZIO.serviceWithZIO[Ref[Long]](_.updateAndGet(_ + 1))
 
-  def run = handler.provideSome[Scope](
+  val handler = receive[Generate](msg => newId.flatMap(id => reply(GenerateOk(msg.msg_id, s"$me-$id"))))
+
+  val run = handler.provideSome[Scope](
     MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Debug)),
     ZLayer.fromZIO(Ref.make(0L))
   )
