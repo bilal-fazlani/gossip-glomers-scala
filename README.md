@@ -59,5 +59,10 @@ sbt efficient-broadcast-1/makeNativeImage
 I can now test the native binary with actual load using maelstrom
 
 ```
-maelstrom test -w broadcast --bin efficient-broadcast-1/target/efficient-broadcast-1-darwin-x86_64 --node-count 25 --time-limit 20 --rate 100 --latency 100
+maelstrom test -w broadcast \
+--bin efficient-broadcast-1/target/efficient-broadcast-1-darwin-x86_64 \
+--node-count 25 \
+--time-limit 20 \
+--rate 100 \
+--latency 100
 ```
