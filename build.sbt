@@ -54,12 +54,73 @@ lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
 lazy val maelstromRunAgent =
   taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
 
+lazy val echo = project
+  .in(file("echo"))
+  .settings(
+    maelstromRunAgent := {
+      bootstrap.value
+      exec("maelstrom test -w echo --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
+      stopNativeImageAgent(name.value)
+    }
+  )
+  .enablePlugins(NativeImagePlugin)
+  .settings(commonSettings: _*)
+
+lazy val `unique-id-generation` = project
+  .in(file("unique-id-generation"))
+  .settings(
+    maelstromRunAgent := {
+      bootstrap.value
+      exec("maelstrom test -w unique-ids --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
+      stopNativeImageAgent(name.value)
+    }
+  )
+  .enablePlugins(NativeImagePlugin)
+  .settings(commonSettings: _*)
+
+lazy val `single-node-broadcast` = project
+  .in(file("single-node-broadcast"))
+  .settings(
+    maelstromRunAgent := {
+      bootstrap.value
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
+      stopNativeImageAgent(name.value)
+    }
+  )
+  .enablePlugins(NativeImagePlugin)
+  .settings(commonSettings: _*)
+
+lazy val `multi-node-broadcast` = project
+  .in(file("multi-node-broadcast"))
+  .settings(
+    maelstromRunAgent := {
+      bootstrap.value
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
+      stopNativeImageAgent(name.value)
+    }
+  )
+  .enablePlugins(NativeImagePlugin)
+  .settings(commonSettings: _*)  
+
+lazy val `fault-tolerant-broadcast` = project
+  .in(file("fault-tolerant-broadcast"))
+  .settings(
+    maelstromRunAgent := {
+      bootstrap.value
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
+      stopNativeImageAgent(name.value)
+    }
+  )
+  .enablePlugins(NativeImagePlugin)
+  .settings(commonSettings: _*)  
+
+
 lazy val `efficient-broadcast-1` = project
   .in(file("efficient-broadcast-1"))
   .settings(
     maelstromRunAgent := {
       bootstrap.value
-      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
       stopNativeImageAgent(name.value)
     }
   )
@@ -71,7 +132,7 @@ lazy val `efficient-broadcast-2` = project
   .settings(
     maelstromRunAgent := {
       bootstrap.value
-      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 2", name.value)
+      exec("maelstrom test -w broadcast --bin run.sh --node-count 1 --time-limit 3 --rate 3", name.value)
       stopNativeImageAgent(name.value)
     }
   )
