@@ -3,6 +3,17 @@ import scala.sys.process._
 
 logo := ""
 
+lazy val platformSuffix: String = {
+  val os: String = System.getProperty("os.name") match {
+    case x if x.toLowerCase.contains("mac")   => "darwin"
+    case x if x.toLowerCase.contains("linux") => "linux"
+    case x if x.toLowerCase.contains("win")   => "windows"
+    case x                                    => throw new RuntimeException("could not detect os: " + x)
+  }
+  val arch = System.getProperty("os.arch")
+  s"$os-$arch"
+}
+
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.0",
   organization := "com.gossip-glomers",
@@ -19,7 +30,7 @@ lazy val commonSettings = Seq(
   nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
-  nativeImageOutput := file(name.value) / "target" / (name.value + "-darwin-x86_64"),
+  nativeImageOutput := file("") / (name.value + "-" + platformSuffix),
   logo := "",
   bootstrap := {
     publishLocal.value
@@ -33,7 +44,7 @@ lazy val commonSettings = Seq(
         "-o",
         s"${name.value}/target/${name.value}.jar"
       )
-    ).!
+    ).!!
   },
   usefulTasks := Seq(
     UsefulTask(
@@ -41,13 +52,11 @@ lazy val commonSettings = Seq(
       "run maelstrom simulation to generate graalvm reflection configuration"
     ),
     UsefulTask(
-      "makeNativeImage",
+      "nativeImage",
       "create native image"
     )
   )
 )
-
-addCommandAlias("makeNativeImage", ";bootstrap;nativeImage")
 
 lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
 
@@ -100,7 +109,7 @@ lazy val `multi-node-broadcast` = project
     }
   )
   .enablePlugins(NativeImagePlugin)
-  .settings(commonSettings: _*)  
+  .settings(commonSettings: _*)
 
 lazy val `fault-tolerant-broadcast` = project
   .in(file("fault-tolerant-broadcast"))
@@ -112,8 +121,7 @@ lazy val `fault-tolerant-broadcast` = project
     }
   )
   .enablePlugins(NativeImagePlugin)
-  .settings(commonSettings: _*)  
-
+  .settings(commonSettings: _*)
 
 lazy val `efficient-broadcast-1` = project
   .in(file("efficient-broadcast-1"))
@@ -144,7 +152,7 @@ def exec(str: String, name: String) = Process(
   file("."),
   "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
   "PROJECT_NAME" -> name
-).!
+).!!
 
 def stopNativeImageAgent(name: String) = {
   Process(

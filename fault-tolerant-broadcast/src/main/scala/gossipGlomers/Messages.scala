@@ -19,6 +19,7 @@ case class Topology(topology: Map[NodeId, Set[NodeId]], msg_id: MessageId) exten
 
 // Bi-directional Messages
 
+@jsonHint("gossip")
 case class Gossip(messages: Set[Int], `type`: String = "gossip") extends InputMessage, Sendable derives JsonCodec
 
 // Out Messages

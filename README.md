@@ -45,15 +45,15 @@ There are two commands available on every solution:
     In order to create a native binary, I first run the java application with a very small load from maelstrom. Using command `maelstromRunAgent`.
     This runs with graalvm agent and generates reflection configuration in `resources/META-INF/native-image/`
 
-2. `makeNativeImage`
+2. `nativeImage`
 
-    After reflection configs are generated, I can now compile the application to a native binary using `makeNativeImage` command.
+    After reflection configs are generated, I can now compile the application to a native binary using `nativeImage` command.
 
 ```bash
 #replace with the challenge you want to compile
 sbt efficient-broadcast-1/maelstromRunAgent
  
-sbt efficient-broadcast-1/makeNativeImage
+sbt efficient-broadcast-1/nativeImage
 ```
 
 I can now test the native binary with actual load using maelstrom
