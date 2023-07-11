@@ -30,7 +30,7 @@ lazy val commonSettings = Seq(
   nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
-  nativeImageOutput := file("") / (name.value + "-" + platformSuffix),
+  nativeImageOutput := target.value / s"${name.value}-$platformSuffix",
   logo := "",
   bootstrap := {
     publishLocal.value

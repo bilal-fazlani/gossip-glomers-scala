@@ -28,8 +28,9 @@ case class Follower(leader: NodeId) extends Node {
       (
         leader.ask[ReportOk](Report(newState.newNumbers, nextMessageId), 150.millis)
           *> logInfo(s"report ${newState.newNumbers} to leader")
-      ).catchAll(e => logWarn(s"reporting failed: ${e}"))
+      )
     }
+    .catchAll(e => logWarn(s"reporting failed: ${e}"))
     .repeat(Schedule.fixed(150.millis).jittered)
     .unit
 }
