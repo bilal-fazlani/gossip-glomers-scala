@@ -36,7 +36,7 @@ lazy val commonSettings = Seq(
   logo := "",
   bootstrap := {
     publishLocal.value
-    Process(
+    val exitCode = Process(
       Seq(
         "coursier",
         "bootstrap",
@@ -46,7 +46,10 @@ lazy val commonSettings = Seq(
         "-o",
         s"${name.value}/target/${name.value}.jar"
       )
-    ).!!
+    ).!
+    if (exitCode != 0) {
+      throw new RuntimeException("bootstrap failed")
+    }
   },
   usefulTasks := Seq(
     UsefulTask(
@@ -149,12 +152,17 @@ lazy val `efficient-broadcast-2` = project
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-def exec(str: String, name: String) = Process(
-  str,
-  file("."),
-  "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-  "PROJECT_NAME" -> name
-).!!
+def exec(str: String, name: String) = {
+  val exitCode = Process(
+    str,
+    file("."),
+    "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
+    "PROJECT_NAME" -> name
+  ).!
+  if (exitCode != 0) {
+    throw new Exception(s"Failed to run $str")
+  }
+}
 
 def stopNativeImageAgent(name: String) = {
   Process(
@@ -162,5 +170,5 @@ def stopNativeImageAgent(name: String) = {
     file("."),
     "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
     "PROJECT_NAME" -> name
-  ).!
+  ).!!
 }

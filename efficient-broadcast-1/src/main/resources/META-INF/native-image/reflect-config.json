@@ -30,40 +30,36 @@
   "name":"[Lzio.json.JsonError;"
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.GenericDetails$",
+  "name":"com.bilalfazlani.zioMaelstrom.GenericDetails$",
   "fields":[{"name":"given_JsonDecoder_GenericDetails$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.GenericMessage$",
+  "name":"com.bilalfazlani.zioMaelstrom.GenericMessage$",
   "fields":[{"name":"given_JsonDecoder_GenericMessage$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.MaelstromInit$",
+  "name":"com.bilalfazlani.zioMaelstrom.MaelstromInit$",
   "fields":[{"name":"derived$JsonDecoder$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.MaelstromInitOk$",
+  "name":"com.bilalfazlani.zioMaelstrom.MaelstromInitOk$",
   "fields":[{"name":"derived$JsonEncoder$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.Protocol$package$MessageId$",
+  "name":"com.bilalfazlani.zioMaelstrom.Protocol$package$MessageId$",
   "fields":[{"name":"given_JsonDecoder_MessageId$lzy1"}, {"name":"given_JsonEncoder_MessageId$lzy1"}, {"name":"given_JsonFieldDecoder_MessageId$lzy1"}, {"name":"given_JsonFieldEncoder_MessageId$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.Protocol$package$MessageSource$",
+  "name":"com.bilalfazlani.zioMaelstrom.Protocol$package$MessageSource$",
   "fields":[{"name":"given_JsonDecoder_MessageSource$lzy1"}, {"name":"given_JsonEncoder_MessageSource$lzy1"}]
 },
 {
-  "name":"com.bilalfazlani.zioMaelstrom.protocol.Protocol$package$NodeId$",
+  "name":"com.bilalfazlani.zioMaelstrom.Protocol$package$NodeId$",
   "fields":[{"name":"given_JsonDecoder_NodeId$lzy1"}, {"name":"given_JsonEncoder_NodeId$lzy1"}, {"name":"given_JsonFieldDecoder_NodeId$lzy1"}, {"name":"given_JsonFieldEncoder_NodeId$lzy1"}]
 },
 {
   "name":"gossipGlomers.BroadcastOk$",
   "fields":[{"name":"derived$JsonCodec$lzy5"}]
-},
-{
-  "name":"gossipGlomers.EfficientBroadcast1",
-  "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
 },
 {
   "name":"gossipGlomers.Gossip$",
