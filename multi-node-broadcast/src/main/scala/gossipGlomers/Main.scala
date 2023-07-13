@@ -3,7 +3,6 @@ package gossipGlomers
 import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
 
 object Main extends ZIOAppDefault {
 

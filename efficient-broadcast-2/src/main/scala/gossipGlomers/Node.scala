@@ -2,12 +2,9 @@ package gossipGlomers
 
 import zio.*
 import com.bilalfazlani.zioMaelstrom.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
 
 trait Node:
   def start: ZIO[Ref.Synchronized[State] & MaelstromRuntime & Scope, Nothing, Unit]
-
-  def nextMsgId = ZIO.serviceWithZIO[Ref[State]](_.updateAndGet(_.incMessageId).map(_.currentMessageId))
 
 object Node:
 

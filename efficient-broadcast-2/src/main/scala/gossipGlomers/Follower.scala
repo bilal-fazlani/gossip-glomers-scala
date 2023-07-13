@@ -3,7 +3,6 @@ package gossipGlomers
 import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
 
 case class Follower(leader: NodeId) extends Node {
   def start = handleMessages zipPar syncMessages
@@ -23,12 +22,11 @@ case class Follower(leader: NodeId) extends Node {
 
   def syncMessages = State
     .move { state =>
-      val newState = state.incMessageId
-      val nextMessageId = newState.currentMessageId
-      (
-        leader.ask[ReportOk](Report(newState.newNumbers, nextMessageId), 150.millis)
-          *> logInfo(s"report ${newState.newNumbers} to leader")
-      )
+      for
+        nextMessageId <- MessageId.next
+        _ <- leader.ask[ReportOk](Report(state.newNumbers, nextMessageId), 150.millis)
+        _ <- logInfo(s"report ${state.newNumbers} to leader")
+      yield ()
     }
     .catchAll(e => logWarn(s"reporting failed: ${e}"))
     .repeat(Schedule.fixed(150.millis).jittered)

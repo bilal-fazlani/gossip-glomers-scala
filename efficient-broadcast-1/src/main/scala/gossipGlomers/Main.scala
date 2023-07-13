@@ -3,7 +3,6 @@ package gossipGlomers
 import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
 
 object Main extends ZIOAppDefault {
 
@@ -14,20 +13,16 @@ object Main extends ZIOAppDefault {
   case class State(
       role: NodeRole,
       numbers: Set[Int] = Set.empty,
-      currentMessageId: MessageId = MessageId(0)
   ) {
     def addNumbers(ns: Set[Int]): State = copy(numbers = numbers ++ ns)
     def addNumber(n: Int): State = copy(numbers = numbers + n)
-    def incMessageId = copy(currentMessageId = currentMessageId.inc)
   }
-
-  private def nextMsgId = ZIO.serviceWithZIO[Ref[State]](_.updateAndGet(_.incMessageId).map(_.currentMessageId))
 
   def gossipToLeader(leader: NodeId, number: Int) =
     val retryCount = 10
     (
       for
-        nextMessageId <- nextMsgId
+        nextMessageId <- MessageId.next
         state <- ZIO.serviceWithZIO[Ref[State]](_.get)
         _ <- leader
           .ask[GossipOk](Gossip(number, nextMessageId), 2.seconds)
@@ -41,7 +36,7 @@ object Main extends ZIOAppDefault {
     val retryCount = 10
     (
       for
-        nextMessageId <- nextMsgId
+        nextMessageId <- MessageId.next
         state <- ZIO.serviceWithZIO[Ref[State]](_.get)
         _ <- ZIO.foreachPar(followers) { follower =>
           follower

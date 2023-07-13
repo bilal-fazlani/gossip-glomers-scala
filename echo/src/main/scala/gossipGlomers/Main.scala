@@ -3,7 +3,6 @@ package gossipGlomers
 import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
 
 case class Echo(echo: String, msg_id: MessageId) extends NeedsReply derives JsonCodec
 

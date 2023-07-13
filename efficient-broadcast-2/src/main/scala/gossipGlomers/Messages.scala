@@ -1,7 +1,7 @@
 package gossipGlomers
 
 import zio.json.*
-import com.bilalfazlani.zioMaelstrom.protocol.*
+import com.bilalfazlani.zioMaelstrom.*
 
 // In Messages
 

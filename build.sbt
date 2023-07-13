@@ -14,6 +14,8 @@ lazy val platformSuffix: String = {
   s"$os-$arch"
 }
 
+val ZIO_MAELSTROM_VERSION = "0.6.0"
+
 lazy val commonSettings = Seq(
   scalaVersion := "3.3.0",
   organization := "com.gossip-glomers",
@@ -29,7 +31,7 @@ lazy val commonSettings = Seq(
   nativeImageAgentMerge := false,
   nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageInstalled := true,
-  libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % "0.4.1",
+  libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % ZIO_MAELSTROM_VERSION,
   nativeImageOutput := target.value / s"${name.value}-$platformSuffix",
   logo := "",
   bootstrap := {
