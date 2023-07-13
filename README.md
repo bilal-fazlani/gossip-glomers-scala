@@ -35,8 +35,8 @@ https://zio-maelstrom.bilal-fazlani.com/
 
 ## Setup
 
-Beyond challenge 3c, using running jar files does not work because they start too slow and the tests timeout. 
-So, I needed to compile them to native binaries using graalvm
+Using running jar files does not work because they start too slow and the tests timeout. 
+So, we need to compile them to native binaries using graalvm
 
 There are two commands available on every solution:
 
@@ -45,24 +45,19 @@ There are two commands available on every solution:
     In order to create a native binary, I first run the java application with a very small load from maelstrom. Using command `maelstromRunAgent`.
     This runs with graalvm agent and generates reflection configuration in `resources/META-INF/native-image/`
 
-2. `nativeImage`
+2. `nativePackage`
 
-    After reflection configs are generated, I can now compile the application to a native binary using `nativeImage` command.
+    After reflection configs are generated, I can now compile the application to a native binary using `nativePackage` command. This task also creates a `test.sh` file which can be used to run the native binary with actual load from maelstrom.
 
 ```bash
 #replace with the challenge you want to compile
 sbt efficient-broadcast-1/maelstromRunAgent
  
-sbt efficient-broadcast-1/nativeImage
+sbt efficient-broadcast-1/nativePackage
 ```
 
-I can now test the native binary with actual load using maelstrom
+I can now `test.sh` script from target directory
 
-```
-maelstrom test -w broadcast \
---bin efficient-broadcast-1/target/efficient-broadcast-1-darwin-x86_64 \
---node-count 25 \
---time-limit 20 \
---rate 100 \
---latency 100
+```bash
+./efficient-broadcast-1/target/test.sh
 ```
