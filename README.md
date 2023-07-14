@@ -33,6 +33,13 @@ https://zio-maelstrom.bilal-fazlani.com/
 | PENDING | [6b: Totally-Available, Read Uncommitted Transactions](https://fly.io/dist-sys/6b/) | [/totally-available-read-uncommitted-transactions/](/totally-available-read-uncommitted-transactions/src/main/scala/gossipGlomers/) |
 | PENDING | [6c: Totally-Available, Read Committed Transactions](https://fly.io/dist-sys/6c/)   | [/totally-available-read-committed-transactions/](/totally-available-read-committed-transactions/src/main/scala/gossipGlomers/)     |
 
+## Pre-requisites
+
+1. Maelstrom should be installed and should be available in PATH
+2. Coursier should be installed and should be available in PATH
+3. GraalVM Community Edition with native-image tool should be installed
+4. `sh` / `bash` should be available
+
 ## Setup
 
 Using running jar files does not work because they start too slow and the tests timeout. 
