@@ -1,0 +1,11 @@
+{
+  "resources":{
+  "includes":[{
+    "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-resources\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-urls\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap.properties\\E"
+  }]},
+  "bundles":[]
+}

@@ -67,7 +67,7 @@ lazy val commonSettings = Seq(
     )
   ),
   nativePackage := {
-    // nativeImage.value
+    nativeImage.value
     val scriptContents = s"""#!/usr/bin/env bash
                             |set -e
                             |set -x
