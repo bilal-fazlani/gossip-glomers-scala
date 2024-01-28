@@ -93,7 +93,7 @@ lazy val `kafka-style-log` = project
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-// Challenge #5b: Multi-Node Kafka-Style Log  
+// Challenge #5b: Multi-Node Kafka-Style Log
 lazy val `multi-node-kafka-style-log` = project
   .in(file("multi-node-kafka-style-log"))
   .settings(
@@ -103,7 +103,7 @@ lazy val `multi-node-kafka-style-log` = project
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-// Challenge #5c: Efficient Kafka-Style Log  
+// Challenge #5c: Efficient Kafka-Style Log
 lazy val `efficient-kafka-style-log` = project
   .in(file("efficient-kafka-style-log"))
   .settings(
@@ -113,7 +113,7 @@ lazy val `efficient-kafka-style-log` = project
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-// Challenge #6a: Single-Node, Totally-Available Transactions  
+// Challenge #6a: Single-Node, Totally-Available Transactions
 lazy val `single-node-totally-available-transactions` = project
   .in(file("single-node-totally-available-transactions"))
   .settings(
@@ -133,7 +133,7 @@ lazy val `totally-available-read-uncommitted-transactions` = project
   .enablePlugins(NativeImagePlugin)
   .settings(commonSettings: _*)
 
-// Challenge #6c: Totally-Available, Read Committed Transactions  
+// Challenge #6c: Totally-Available, Read Committed Transactions
 lazy val `totally-available-read-committed-transactions` = project
   .in(file("totally-available-read-committed-transactions"))
   .settings(
@@ -158,19 +158,17 @@ lazy val platformSuffix: String = {
 }
 
 lazy val commonSettings = Seq(
-  scalaVersion := "3.3.0",
+  scalaVersion := "3.3.1",
   organization := "com.gossip-glomers",
   Compile / mainClass := Some("gossipGlomers.Main"),
   resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
   scalacOptions += "-Wunused:all",
   version := "0.1.0-SNAPSHOT",
   run / connectInput := true,
-  nativeImageGraalHome := file(
-    "/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-20.0.1+9.1/Contents/Home"
-  ).toPath,
+  nativeImageGraalHome := (sbt.io.Path.userHome / ".sdkman/candidates/java/current/").toPath,
+  nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageAgentOutputDir := baseDirectory.value / "src" / "main" / "resources" / "META-INF" / "native-image",
   nativeImageAgentMerge := false,
-  nativeImageOptions ++= Seq("--no-fallback", "-march=native"), // , "--verbose"),
   nativeImageInstalled := true,
   libraryDependencies += "com.bilal-fazlani" %% "zio-maelstrom" % ZIO_MAELSTROM_VERSION,
   nativeImageOutput := target.value / s"${name.value}-$platformSuffix",

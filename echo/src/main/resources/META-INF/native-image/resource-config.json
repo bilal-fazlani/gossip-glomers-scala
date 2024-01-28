@@ -1,11 +1,23 @@
 {
   "resources":{
   "includes":[{
+    "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-resources-1\\E"
+  }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-resources\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-urls-1\\E"
   }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-urls\\E"
   }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap.properties\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/set-python-jep-properties\\E"
+  }, {
+    "pattern":"\\Qcoursier/bootstrap/launcher/set-python-properties\\E"
   }]},
   "bundles":[]
 }

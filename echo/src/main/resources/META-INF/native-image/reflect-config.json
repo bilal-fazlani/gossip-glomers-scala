@@ -106,10 +106,6 @@
   "methods":[{"name":"major","parameterTypes":[] }]
 },
 {
-  "name":"java.lang.Thread",
-  "fields":[{"name":"threadLocalRandomProbe"}]
-},
-{
   "name":"java.lang.invoke.VarHandle",
   "methods":[{"name":"releaseFence","parameterTypes":[] }]
 },
@@ -126,12 +122,11 @@
   "fields":[{"name":"value"}]
 },
 {
-  "name":"java.util.concurrent.atomic.Striped64",
-  "fields":[{"name":"base"}, {"name":"cellsBusy"}]
-},
-{
   "name":"magnolia1.CallByNeed",
   "fields":[{"name":"0bitmap$1"}]
+},
+{
+  "name":"sun.misc.URLClassPath"
 },
 {
   "name":"sun.misc.Unsafe",
