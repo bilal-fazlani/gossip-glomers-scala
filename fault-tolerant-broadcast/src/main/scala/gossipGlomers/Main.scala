@@ -36,7 +36,7 @@ object Main extends ZIOAppDefault {
     } yield ()).repeat(Schedule.fixed(300.millis)).forkScoped.unit
 
   def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Info)),
+    MaelstromRuntime.live,
     State.make
   )
 }

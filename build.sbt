@@ -1,7 +1,7 @@
 import sbtwelcome._
 import scala.sys.process._
 
-val ZIO_MAELSTROM_VERSION = "0.6.0"
+val ZIO_MAELSTROM_VERSION = "1.0.0"
 
 // Challenge #1: Echo
 lazy val echo = project
@@ -189,6 +189,15 @@ lazy val commonSettings = Seq(
     if (exitCode != 0) {
       throw new RuntimeException("bootstrap failed")
     }
+    val scriptContents = s"""#!/usr/bin/env bash
+                                |set -e
+                                |set -x
+                                |
+                                |maelstrom test --bin $$(dirname "$$0")/${name.value}.jar ${testParams.value}
+                                |""".stripMargin
+    val p = target.value / "testjar.sh"
+    io.IO.write(p, scriptContents)
+    io.IO.chmod("rwxr-----", p)
   },
   maelstromRunAgent := {
     bootstrap.value
@@ -197,12 +206,16 @@ lazy val commonSettings = Seq(
   },
   usefulTasks := Seq(
     UsefulTask(
+      "bootstrap",
+      "creates fat jar with all dependencies with a maelstrom runner script"
+    ),
+    UsefulTask(
       "maelstromRunAgent",
       "run maelstrom simulation to generate graalvm reflection configuration"
     ),
     UsefulTask(
       "nativePackage",
-      "create native image with maelstrom runner script"
+      "create native image with a maelstrom runner script"
     )
   ),
   nativePackage := {

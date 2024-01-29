@@ -11,11 +11,11 @@ case class EchoOk(in_reply_to: MessageId, echo: String, `type`: String = "echo_o
 
 object Main extends ZIOAppDefault {
 
-  def handler = receive[Echo] { 
-    case Echo(echo, msg_id) => reply(EchoOk(msg_id, echo))
+  def handler = receive[Echo] { case Echo(echo, msg_id) =>
+    reply(EchoOk(msg_id, echo))
   }
 
   def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Debug))
+    MaelstromRuntime.live(_.logLevel(NodeLogLevel.Debug))
   )
 }

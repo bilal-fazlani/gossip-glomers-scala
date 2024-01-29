@@ -16,7 +16,7 @@ object Main extends ZIOAppDefault {
   val handler = receive[Generate](msg => newId.flatMap(id => reply(GenerateOk(msg.msg_id, s"$me-$id"))))
 
   val run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Debug)),
+    MaelstromRuntime.live(_.logLevel(NodeLogLevel.Debug)),
     ZLayer.fromZIO(Ref.make(0L))
   )
 }

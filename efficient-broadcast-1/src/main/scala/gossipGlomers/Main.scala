@@ -98,7 +98,7 @@ object Main extends ZIOAppDefault {
     yield leaderInfo
 
   def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Info)),
+    MaelstromRuntime.live,
     ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get))))
   )
 }

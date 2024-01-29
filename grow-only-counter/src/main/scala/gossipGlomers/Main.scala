@@ -84,6 +84,6 @@ object Main extends ZIOAppDefault {
   }
 
   def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Debug))
+    MaelstromRuntime.live(_.logLevel(NodeLogLevel.Debug))
   )
 }

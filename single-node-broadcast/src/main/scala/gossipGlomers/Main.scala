@@ -28,7 +28,7 @@ object Main extends ZIOAppDefault {
   }
 
   def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(Settings(logLevel = NodeLogLevel.Info)),
+    MaelstromRuntime.live,
     State.make
   )
 }
