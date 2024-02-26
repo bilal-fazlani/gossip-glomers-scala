@@ -4,7 +4,7 @@ import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
 
-object Main extends ZIOAppDefault {
+object Main extends MaelstromNode {
 
   case class State(
       numbers: Set[Int] = Set.empty
@@ -27,8 +27,5 @@ object Main extends ZIOAppDefault {
     case Topology(_, msg_id) => reply(TopologyOk(msg_id))
   }
 
-  def run = handler.provideSome[Scope](
-    MaelstromRuntime.live,
-    State.make
-  )
+  def program = handler.provideRemaining(State.make)
 }

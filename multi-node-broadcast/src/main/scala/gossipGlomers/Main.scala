@@ -4,7 +4,7 @@ import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
 
-object Main extends ZIOAppDefault {
+object Main extends MaelstromNode {
 
   case class State(
       numbers: Set[Int] = Set.empty
@@ -35,8 +35,5 @@ object Main extends ZIOAppDefault {
       _ <- ZIO.foreachPar(neighbours)(_ send Gossip(nums))
     } yield ()).repeat(Schedule.fixed(300.millis)).forkScoped.unit
 
-  def run = handler.provideSome[Scope](
-    MaelstromRuntime.live,
-    State.make
-  )
+  def program = handler.provideRemaining(State.make)
 }

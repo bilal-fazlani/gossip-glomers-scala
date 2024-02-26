@@ -9,13 +9,9 @@ case class Echo(echo: String, msg_id: MessageId) extends NeedsReply derives Json
 case class EchoOk(in_reply_to: MessageId, echo: String, `type`: String = "echo_ok") extends Sendable, Reply
     derives JsonCodec
 
-object Main extends ZIOAppDefault {
+object Main extends MaelstromNode {
 
-  def handler = receive[Echo] { case Echo(echo, msg_id) =>
-    reply(EchoOk(msg_id, echo))
-  }
+  override val configure: NodeConfig = NodeConfig().withLogLevelDebug
 
-  def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(_.logLevel(NodeLogLevel.Debug))
-  )
+  val program = receive[Echo](msg => reply(EchoOk(msg.msg_id, msg.echo)))
 }

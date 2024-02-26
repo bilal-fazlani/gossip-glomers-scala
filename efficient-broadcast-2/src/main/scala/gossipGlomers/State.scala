@@ -3,6 +3,7 @@ package gossipGlomers
 import zio.ZIO
 import zio.Ref
 import zio.Ref.Synchronized
+import zio.ZLayer
 
 case class State(
     oldNumbers: Set[Int] = Set.empty,
@@ -23,4 +24,6 @@ object State {
     ZIO.serviceWithZIO[Ref.Synchronized[State]](_.updateSomeZIO {
       case state if state.newNumbers.nonEmpty => effect(state) *> ZIO.succeed(state.move)
     })
+
+  def empty = ZLayer.fromZIO(Ref.Synchronized.make(State()))
 }

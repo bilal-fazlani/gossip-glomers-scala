@@ -4,7 +4,7 @@ import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
 
-object Main extends ZIOAppDefault {
+object Main extends MaelstromNode {
 
   private def readSelf(me: NodeId) =
     SeqKv
@@ -27,14 +27,12 @@ object Main extends ZIOAppDefault {
 
   private def add(delta: Long, source: NodeId, me: NodeId, msg_id: MessageId): ZIO[MaelstromRuntime, AskError, Unit] =
     for
-      value <- readSelf(me)
-      _ <- SeqKv
-        .cas(me, value, value + delta, true, 300.millis)
-        .catchSome { case ErrorMessage(_, ErrorCode.PreconditionFailed, _, _) =>
-          logDebug(s"an attempt to add key $me failed due to precondition failure. will attempt again")
-            *> add(delta, source, me, msg_id)
-        }
-        .tapError(e => logWarn(s"an attempt to add key $me failed with error: $e"))
+      // _ <- SeqKv
+      //   .cas[NodeId, Long](me, 300.millis) {
+      //     case Some(currentValue) => currentValue + delta
+      //     case None               => delta
+      //   }
+      //   .tapError(e => logWarn(s"an attempt to add key $me failed with error: $e"))
       _ <- source send AddOk(msg_id)
     yield ()
 
@@ -45,8 +43,7 @@ object Main extends ZIOAppDefault {
       case d: DecodingFailure =>
         remote send ErrorMessage(msg_id, ErrorCode.NotSupported, "functionality seems to be broken")
 
-  val handler = receive[InputMessage] {
-
+  val program = receive[InputMessage] {
     case Add(delta, msg_id) =>
       add(delta, src, me, msg_id)
         .retryN(2)
@@ -60,7 +57,7 @@ object Main extends ZIOAppDefault {
           .tapError(e => logError(s"could not read key $me all attempts exhausted. error: $e"))
           .map(Some(_))
           .catchAll(replyError(_, msg_id, src) as None)
-        _ <- reply(GetOk(msg_id, response.get))
+        _ <- reply(GetOk(msg_id, response.get)) // todo: this will break if response is None
       yield ()
 
     case Read(msg_id) =>
@@ -83,7 +80,8 @@ object Main extends ZIOAppDefault {
       yield ()
   }
 
-  def run = handler.provideSome[Scope](
-    MaelstromRuntime.live(_.logLevel(NodeLogLevel.Debug))
-  )
+  case class Echo(echo: String, msg_id: MessageId) extends NeedsReply derives JsonCodec
+
+  case class EchoOk(in_reply_to: MessageId, echo: String, `type`: String = "echo_ok") extends Sendable, Reply
+      derives JsonCodec
 }

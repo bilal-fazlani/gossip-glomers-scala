@@ -4,7 +4,7 @@ import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
 
-object Main extends ZIOAppDefault {
+object Main extends MaelstromNode {
 
   enum NodeRole:
     case Leader(followers: Set[NodeId])
@@ -12,7 +12,7 @@ object Main extends ZIOAppDefault {
 
   case class State(
       role: NodeRole,
-      numbers: Set[Int] = Set.empty,
+      numbers: Set[Int] = Set.empty
   ) {
     def addNumbers(ns: Set[Int]): State = copy(numbers = numbers ++ ns)
     def addNumber(n: Int): State = copy(numbers = numbers + n)
@@ -77,7 +77,7 @@ object Main extends ZIOAppDefault {
     case Topology(_, msg_id) => reply(TopologyOk(msg_id))
   }
 
-  def handler = for
+  val handler = for
     role <- ZIO.serviceWithZIO[Ref[State]](_.get.map(_.role))
     _ <- role match
       case NodeRole.Leader(followers) => leaderHandler(followers)
@@ -97,8 +97,6 @@ object Main extends ZIOAppDefault {
         case NodeRole.Follower(nodeId) => logInfo(s"leader is $nodeId")
     yield leaderInfo
 
-  def run = handler.provideSome[Scope](
-    MaelstromRuntime.live,
-    ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get))))
-  )
+  val program =
+    handler.provideRemaining(ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get)))))
 }
