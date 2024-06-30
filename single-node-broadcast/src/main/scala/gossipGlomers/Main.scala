@@ -27,5 +27,5 @@ object Main extends MaelstromNode {
     case Topology(_, msg_id) => reply(TopologyOk(msg_id))
   }
 
-  def program = handler.provideRemaining(State.make)
+  def program = handler.provideSome[MaelstromRuntime](State.make)
 }

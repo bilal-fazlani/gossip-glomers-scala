@@ -14,7 +14,6 @@ object Main extends MaelstromNode {
   val newId = ZIO.serviceWithZIO[Ref[Long]](_.updateAndGet(_ + 1))
 
   val program =
-    receive[Generate](msg => newId.flatMap(id => reply(GenerateOk(msg.msg_id, s"$me-$id")))).provideRemaining(
-      ZLayer.fromZIO(Ref.make(0L))
-    )
+    receive[Generate](msg => newId.flatMap(id => reply(GenerateOk(msg.msg_id, s"$me-$id"))))
+      .provideSome[MaelstromRuntime](ZLayer.fromZIO(Ref.make(0L)))
 }

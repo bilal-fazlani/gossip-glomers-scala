@@ -11,7 +11,7 @@ case class EchoOk(in_reply_to: MessageId, echo: String, `type`: String = "echo_o
 
 object Main extends MaelstromNode {
 
-  override val configure: NodeConfig = NodeConfig().withLogLevelDebug
+  override val configure: NodeConfig = NodeConfig.withLogLevelDebug
 
   val program = receive[Echo](msg => reply(EchoOk(msg.msg_id, msg.echo)))
 }

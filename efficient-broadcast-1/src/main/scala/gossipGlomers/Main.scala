@@ -98,5 +98,5 @@ object Main extends MaelstromNode {
     yield leaderInfo
 
   val program =
-    handler.provideRemaining(ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get)))))
+    handler.provideSome[MaelstromRuntime](ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get)))))
 }

@@ -35,5 +35,5 @@ object Main extends MaelstromNode {
       _ <- ZIO.foreachPar(neighbours)(_ send Gossip(nums))
     } yield ()).repeat(Schedule.fixed(300.millis)).forkScoped.unit
 
-  def program = handler.provideRemaining(State.make)
+  def program = handler.provideSome[MaelstromRuntime & Scope](State.make)
 }

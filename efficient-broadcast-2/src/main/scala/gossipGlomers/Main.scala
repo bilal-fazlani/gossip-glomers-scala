@@ -2,16 +2,17 @@ package gossipGlomers
 
 import zio.*
 import com.bilalfazlani.zioMaelstrom.*
+import zio.Ref.Synchronized
+import com.bilalfazlani.zioMaelstrom.Initialisation
+import com.bilalfazlani.zioMaelstrom.Settings
 
 object Main extends MaelstromNode {
-  
-  override val configure: NodeConfig = NodeConfig().withLogLevelDebug
 
-  val program = {
-    for
-      myId <- getMyNodeId
-      other <- getOtherNodeIds
-      _ <- Node.start(myId, other)
-    yield ()
-  }.provideRemaining(State.empty)
+  override val configure: NodeConfig = NodeConfig.withLogLevelDebug
+
+  def program =  Node.start
+    .provideSome[MaelstromRuntime & Scope](
+      Node.live,
+      ZLayer.fromZIO(Ref.Synchronized.make(State()))
+    )
 }

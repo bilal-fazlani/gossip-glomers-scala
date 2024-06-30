@@ -7,3 +7,5 @@ metals.sbt
 store/
 .lock
 .DS_Store
+*.iml
+.idea

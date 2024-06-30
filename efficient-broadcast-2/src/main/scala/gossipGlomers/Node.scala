@@ -7,7 +7,8 @@ trait Node:
   def start: ZIO[Ref.Synchronized[State] & MaelstromRuntime & Scope, Nothing, Unit]
 
 object Node:
-  private def makeNode(myId: NodeId, others: Set[NodeId]) =
+
+  private val makeNode =
     enum NodeRole:
       case Leader(followers: Set[NodeId])
       case Follower(leader: NodeId)
@@ -15,7 +16,9 @@ object Node:
     given Ordering[NodeId] = Ordering.by[NodeId, String](_.toString)
     for
       _ <- logDebug("deciding first alphabetical node as leader")
-      leader = (others + myId).toSeq.sorted.head
+      others <- getOtherNodeIds
+      myId <- getMyNodeId
+      leader = (others + myId).toSeq.min
       leaderInfo = if leader == myId then NodeRole.Leader(others) else NodeRole.Follower(leader)
       node <- leaderInfo match
         case NodeRole.Leader(_) =>
@@ -24,4 +27,6 @@ object Node:
           logInfo(s"leader is $nodeId") as Follower(nodeId)
     yield node
 
-  def start(myId: NodeId, others: Set[NodeId]) = makeNode(myId, others).flatMap(_.start)
+  val live = ZLayer.fromZIO(makeNode)
+
+  val start = ZIO.serviceWithZIO[Node](_.start)

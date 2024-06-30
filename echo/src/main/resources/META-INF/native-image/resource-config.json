@@ -5,6 +5,8 @@
   }, {
     "pattern":"\\QMETA-INF/services/java.time.zone.ZoneRulesProvider\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/org/jline/terminal/provider/jansi\\E"
+  }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-resources-1\\E"
   }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/bootstrap-jar-resources\\E"
@@ -18,6 +20,10 @@
     "pattern":"\\Qcoursier/bootstrap/launcher/set-python-jep-properties\\E"
   }, {
     "pattern":"\\Qcoursier/bootstrap/launcher/set-python-properties\\E"
+  }, {
+    "pattern":"jdk.internal.le:\\Qjdk/internal/org/jline/utils/capabilities.txt\\E"
+  }, {
+    "pattern":"jdk.internal.le:\\Qjdk/internal/org/jline/utils/dumb.caps\\E"
   }]},
   "bundles":[]
 }

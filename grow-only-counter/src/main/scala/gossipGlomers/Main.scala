@@ -27,13 +27,11 @@ object Main extends MaelstromNode {
 
   private def add(delta: Long, source: NodeId, me: NodeId, msg_id: MessageId): ZIO[MaelstromRuntime, AskError, Unit] =
     for
-      // _ <- SeqKv
-      //   .cas[NodeId, Long](me, 300.millis) {
-      //     case Some(currentValue) => currentValue + delta
-      //     case None               => delta
-      //   }
-      //   .tapError(e => logWarn(s"an attempt to add key $me failed with error: $e"))
-      _ <- source send AddOk(msg_id)
+       _ <- SeqKv.update[NodeId, Long](me, 300.millis) {
+         case Some(currentValue) => currentValue + delta
+         case None               => delta
+       }.tapError(e => logWarn(s"an attempt to add key $me failed with error: $e"))
+       _ <- source send AddOk(msg_id)
     yield ()
 
   private def replyError(askError: AskError, msg_id: MessageId, remote: NodeId) =
