@@ -1,7 +1,8 @@
 import sbtwelcome.*
 import scala.sys.process.*
 
-val ZIO_MAELSTROM_VERSION = "0.0.0+1-45f19550-SNAPSHOT"
+val ZIO_MAELSTROM_VERSION = "2.0.0"
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 // Challenge #1: Echo
 lazy val echo = project
@@ -166,7 +167,7 @@ lazy val commonSettings = Seq(
   version := "0.1.0-SNAPSHOT",
   run / connectInput := true,
   nativeImageGraalHome := (sbt.io.Path.userHome / ".sdkman/candidates/java/current/").toPath,
-  nativeImageOptions ++= Seq("--no-fallback", "-march=native", "-O=b"), // , "--verbose"),
+  nativeImageOptions ++= Seq("--no-fallback", "-march=native", "-Ob"), // , "--verbose"),
   nativeImageAgentOutputDir := baseDirectory.value / "src" / "main" / "resources" / "META-INF" / "native-image",
   nativeImageAgentMerge := false,
   nativeImageInstalled := true,
