@@ -117,10 +117,6 @@
   "methods":[{"name":"major","parameterTypes":[] }]
 },
 {
-  "name":"java.lang.Thread",
-  "fields":[{"name":"threadLocalRandomProbe"}]
-},
-{
   "name":"java.lang.invoke.VarHandle",
   "methods":[{"name":"releaseFence","parameterTypes":[] }]
 },
@@ -137,12 +133,11 @@
   "fields":[{"name":"value"}]
 },
 {
-  "name":"java.util.concurrent.atomic.Striped64",
-  "fields":[{"name":"base"}, {"name":"cellsBusy"}]
-},
-{
   "name":"magnolia1.CallByNeed",
   "fields":[{"name":"0bitmap$1"}]
+},
+{
+  "name":"sun.misc.URLClassPath"
 },
 {
   "name":"sun.misc.Unsafe",
@@ -198,23 +193,23 @@
 },
 {
   "name":"zio.json.DeriveJsonDecoder$$anon$4",
-  "fields":[{"name":"0bitmap$1"}]
+  "fields":[{"name":"defaults$lzy1"}, {"name":"namesMap$lzy1"}, {"name":"tcs$lzy1"}]
 },
 {
   "name":"zio.json.DeriveJsonEncoder$$anon$11",
-  "fields":[{"name":"0bitmap$2"}]
+  "fields":[{"name":"tcs$lzy3"}]
 },
 {
   "name":"zio.json.ast.Json$Arr$",
-  "fields":[{"name":"0bitmap$3"}]
+  "fields":[{"name":"arrd$lzy1"}, {"name":"arre$lzy1"}]
 },
 {
   "name":"zio.json.ast.Json$Obj",
-  "fields":[{"name":"0bitmap$1"}]
+  "fields":[{"name":"keys$lzy1"}, {"name":"values$lzy1"}]
 },
 {
   "name":"zio.json.ast.Json$Obj$",
-  "fields":[{"name":"0bitmap$2"}]
+  "fields":[{"name":"objd$lzy1"}, {"name":"obje$lzy1"}]
 },
 {
   "name":"zio.package$",
