@@ -10,32 +10,25 @@ object Main extends MaelstromNode {
 
   override val configure: NodeConfig = NodeConfig.withLogLevelDebug
 
-  private def readSelf(me: NodeId) =
-    SeqKv
-      .read[Long](me, 400.millis)
-      .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
-        ZIO.succeed(0L)
-      }
-      .tapError(e => logError(s"failed to read key $me from seq-kv. error: $e"))
+  private def readDatabase = {
+    for
+      me <- MaelstromRuntime.me
+      count <- SeqKv
+        .read[Long](me, 250.millis)
+        .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
+          ZIO.succeed(0L)
+        }
+        .tapError(e => logError(s"failed to read key $me from seq-kv. error: $e"))
+    yield count
+  }
 
-  private def readOther(remote: NodeId) =
+  private def fetchFromNode(remote: NodeId): ZIO[MessageSender, AskError, Long] =
     remote
-      .ask[GetOk](Get(), 1.second)
+      .ask[GetOk](Get(), 300.millis)
       .map(_.value)
       .tapError(e => logWarning(s"an attempt to read from $remote failed with error: $e"))
-      .retryN(2)
+      .retryN(5)
       .tapError(e => logError(s"failed to read from $remote. error: $e"))
-
-  private def add(delta: Long, source: NodeId, me: NodeId): ZIO[MaelstromRuntime, AskError, Unit] =
-    for
-      _ <- SeqKv
-        .update[NodeId, Long](me, 600.millis) {
-          case Some(currentValue) => currentValue + delta
-          case None               => delta
-        }
-        .tapError(e => logWarning(s"an attempt to add key $me failed with error: $e"))
-      _ <- source send AddOk()
-    yield ()
 
   private def makeErrorReply(askError: AskError) = askError match
     case Timeout(downstreamRequestId: MessageId, downstreamAddress: NodeId, _) =>
@@ -46,40 +39,36 @@ object Main extends MaelstromNode {
     case DecodingFailure(_, _) => Error(ErrorCode.NotSupported, "functionality seems to be broken")
     case _                     => Error(ErrorCode.NotSupported, "functionality seems to be broken")
 
+  // noinspection TypeAnnotation
   val program = receive[InputMessage] {
     case Add(delta) =>
-      add(delta, src, me)
-        .retryN(2)
-        .tapError(e => logError(s"could not add key $me all attempts exhausted. error: $e"))
-        .catchAll(e => reply(makeErrorReply(e)))
+      SeqKv
+        .update[NodeId, Long](me, 300.millis) {
+          case Some(currentValue) => currentValue + delta
+          case None               => delta
+        }
+        .tapError(e => logWarning(s"an attempt to add key $me failed with error: $e"))
+        .retryN(5)
+        .tapError(e => logError(s"failed to add key $me all attempts exhausted. error: $e") *> reply(makeErrorReply(e)))
+        .zipRight(reply(AddOk()))
+        .ignore
 
     case Get() =>
-      for
-        response <- readSelf(me)
-          .retryN(2)
-          .tapError(e => logError(s"could not read key $me all attempts exhausted. error: $e"))
-          .map(Some(_))
-          .catchAll(e => reply(makeErrorReply(e)) as None)
-        _ <- reply(GetOk(response.get)) // todo: this will break if response is None
-      yield ()
+      readDatabase
+        .foldZIO(
+          error => logError(s"failed to read key $me from database. error: $error") *> reply(makeErrorReply(error)),
+          count => reply(GetOk(count))
+        )
 
     case Read() =>
-      for
-        myValueFiber <- readSelf(me)
-          .retryN(2)
-          .map(Some(_))
-          .forkScoped
-        othersTotal <-
-          ZIO
-            .mergeAllPar(others.map(readOther))(0L)(_ + _)
-            .map(Some(_))
-            .catchAll(e => reply(makeErrorReply(e)) as None)
-        myValue <- myValueFiber.join.catchAll(e => reply(makeErrorReply(e)) as None)
-        total = for
-          m <- myValue
-          o <- othersTotal
-        yield m + o
-        _ <- total.fold(ZIO.unit)(x => reply(ReadOk(x)))
-      yield ()
+      val total = for
+        othersTotalFiber <- ZIO.mergeAllPar(others.map(fetchFromNode))(0L)(_ + _).forkScoped
+        myValue <- readDatabase.retryN(3)
+        othersTotal <- othersTotalFiber.join
+      yield myValue + othersTotal
+      total.foldZIO(
+        error => reply(makeErrorReply(error)),
+        count => reply(ReadOk(count))
+      )
   }
 }

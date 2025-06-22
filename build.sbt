@@ -186,7 +186,7 @@ lazy val commonSettings = Seq(
         s"com.gossip-glomers:${name.value}_3:0.1.0-SNAPSHOT",
         "-f",
         "-o",
-        s"${name.value}/target/${name.value}.jar"
+        s"${target.value}/${name.value}.jar"
       )
     ).!
     if (exitCode != 0) {

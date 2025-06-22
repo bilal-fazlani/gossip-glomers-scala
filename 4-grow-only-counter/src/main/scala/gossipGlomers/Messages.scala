@@ -13,11 +13,10 @@ case class Add(delta: Long) extends InputMessage
 @jsonHint("read")
 case class Read() extends InputMessage
 
-// In/Out Messages
 @jsonHint("get")
 case class Get() extends InputMessage derives JsonCodec
 
-// Out Messages
+// Responses Messages
 
 case class AddOk() derives JsonCodec
 
