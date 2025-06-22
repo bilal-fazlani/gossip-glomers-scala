@@ -8,17 +8,19 @@ import zio.ZIO.{logError, logWarning}
 
 object Main extends MaelstromNode {
 
+  override val configure: NodeConfig = NodeConfig.withLogLevelDebug
+
   private def readSelf(me: NodeId) =
     SeqKv
-      .read[Long](me, 300.millis)
-      .catchSome { case ErrorMessage(_, ErrorCode.KeyDoesNotExist, _, _) =>
+      .read[Long](me, 400.millis)
+      .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
         ZIO.succeed(0L)
       }
       .tapError(e => logError(s"failed to read key $me from seq-kv. error: $e"))
 
   private def readOther(remote: NodeId) =
     remote
-      .ask[GetOk](Get(), 500.millis)
+      .ask[GetOk](Get(), 1.second)
       .map(_.value)
       .tapError(e => logWarning(s"an attempt to read from $remote failed with error: $e"))
       .retryN(2)
@@ -27,7 +29,7 @@ object Main extends MaelstromNode {
   private def add(delta: Long, source: NodeId, me: NodeId): ZIO[MaelstromRuntime, AskError, Unit] =
     for
       _ <- SeqKv
-        .update[NodeId, Long](me, 300.millis) {
+        .update[NodeId, Long](me, 600.millis) {
           case Some(currentValue) => currentValue + delta
           case None               => delta
         }
@@ -35,21 +37,21 @@ object Main extends MaelstromNode {
       _ <- source send AddOk()
     yield ()
 
-  private def replyError(askError: AskError, msg_id: Option[MessageId], remote: NodeId) =
-    (askError, msg_id) match
-      case (t: Timeout, Some(msg_id)) =>
-        remote send ErrorMessage(msg_id, ErrorCode.Timeout, "downstream request timed out")
-      case (e: ErrorMessage, Some(msg_id)) => remote send e.copy(in_reply_to = msg_id)
-      case (d: DecodingFailure, Some(msg_id)) =>
-        remote send ErrorMessage(msg_id, ErrorCode.NotSupported, "functionality seems to be broken")
-      case _ => ZIO.unit
+  private def makeErrorReply(askError: AskError) = askError match
+    case Timeout(downstreamRequestId: MessageId, downstreamAddress: NodeId, _) =>
+      Error(
+        ErrorCode.Timeout,
+        s"timed out while waiting for a response from $downstreamAddress for messageId $downstreamRequestId"
+      )
+    case DecodingFailure(_, _) => Error(ErrorCode.NotSupported, "functionality seems to be broken")
+    case _                     => Error(ErrorCode.NotSupported, "functionality seems to be broken")
 
   val program = receive[InputMessage] {
     case Add(delta) =>
       add(delta, src, me)
         .retryN(2)
         .tapError(e => logError(s"could not add key $me all attempts exhausted. error: $e"))
-        .catchAll(replyError(_, summon[Option[MessageId]], src))
+        .catchAll(e => reply(makeErrorReply(e)))
 
     case Get() =>
       for
@@ -57,7 +59,7 @@ object Main extends MaelstromNode {
           .retryN(2)
           .tapError(e => logError(s"could not read key $me all attempts exhausted. error: $e"))
           .map(Some(_))
-          .catchAll(replyError(_, summon[Option[MessageId]], src) as None)
+          .catchAll(e => reply(makeErrorReply(e)) as None)
         _ <- reply(GetOk(response.get)) // todo: this will break if response is None
       yield ()
 
@@ -71,8 +73,8 @@ object Main extends MaelstromNode {
           ZIO
             .mergeAllPar(others.map(readOther))(0L)(_ + _)
             .map(Some(_))
-            .catchAll(replyError(_, summon[Option[MessageId]], src) as None)
-        myValue <- myValueFiber.join.catchAll(replyError(_, summon[Option[MessageId]], src) as None)
+            .catchAll(e => reply(makeErrorReply(e)) as None)
+        myValue <- myValueFiber.join.catchAll(e => reply(makeErrorReply(e)) as None)
         total = for
           m <- myValue
           o <- othersTotal

@@ -1,12 +1,12 @@
 import sbtwelcome.*
 import scala.sys.process.*
 
-val ZIO_MAELSTROM_VERSION = "2.2.0+5-7e9e1bab+20250622-0000-SNAPSHOT"
+val ZIO_MAELSTROM_VERSION = "2.2.0+10-ca9a3d28-SNAPSHOT"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 // Challenge #1: Echo
 lazy val echo = project
-  .in(file("echo"))
+  .in(file("1-echo"))
   .settings(
     agentParams := "-w echo --node-count 1 --time-limit 3",
     testParams := "-w echo --node-count 1 --time-limit 10"
@@ -16,7 +16,7 @@ lazy val echo = project
 
 // Challenge #2: Unique ID Generation
 lazy val `unique-id-generation` = project
-  .in(file("unique-id-generation"))
+  .in(file("2-unique-id-generation"))
   .settings(
     agentParams := "-w unique-ids --node-count 1 --time-limit 3 --rate 3",
     testParams := "-w unique-ids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition"
@@ -26,7 +26,7 @@ lazy val `unique-id-generation` = project
 
 // Challenge #3a: Single-Node Broadcast
 lazy val `single-node-broadcast` = project
-  .in(file("single-node-broadcast"))
+  .in(file("3a-single-node-broadcast"))
   .settings(
     agentParams := "-w broadcast --node-count 1 --time-limit 3 --rate 3",
     testParams := "-w broadcast --node-count 1 --time-limit 20 --rate 10"
@@ -36,7 +36,7 @@ lazy val `single-node-broadcast` = project
 
 // Challenge #3b: Multi-Node Broadcast
 lazy val `multi-node-broadcast` = project
-  .in(file("multi-node-broadcast"))
+  .in(file("3b-multi-node-broadcast"))
   .settings(
     agentParams := "-w broadcast --node-count 1 --time-limit 3 --rate 3",
     testParams := "-w broadcast --node-count 5 --time-limit 20 --rate 10"
@@ -46,7 +46,7 @@ lazy val `multi-node-broadcast` = project
 
 // Challenge #3c: Fault-Tolerant Broadcast
 lazy val `fault-tolerant-broadcast` = project
-  .in(file("fault-tolerant-broadcast"))
+  .in(file("3c-fault-tolerant-broadcast"))
   .settings(
     agentParams := "-w broadcast --node-count 1 --time-limit 3 --rate 3 --nemesis partition",
     testParams := "-w broadcast --node-count 5 --time-limit 20 --rate 10 --nemesis partition"
@@ -56,7 +56,7 @@ lazy val `fault-tolerant-broadcast` = project
 
 // Challenge #3d: Efficient Broadcast, Part I
 lazy val `efficient-broadcast-1` = project
-  .in(file("efficient-broadcast-1"))
+  .in(file("3d-efficient-broadcast-1"))
   .settings(
     agentParams := "-w broadcast --node-count 1 --time-limit 3 --rate 3 --latency 100",
     testParams := "-w broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100"
@@ -66,7 +66,7 @@ lazy val `efficient-broadcast-1` = project
 
 // Challenge #3e: Efficient Broadcast, Part II
 lazy val `efficient-broadcast-2` = project
-  .in(file("efficient-broadcast-2"))
+  .in(file("3e-efficient-broadcast-2"))
   .settings(
     agentParams := "-w broadcast --node-count 1 --time-limit 3 --rate 3 --latency 100",
     testParams := "-w broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100"
@@ -76,7 +76,7 @@ lazy val `efficient-broadcast-2` = project
 
 // Challenge #4: Grow-Only Counter
 lazy val `grow-only-counter` = project
-  .in(file("grow-only-counter"))
+  .in(file("4-grow-only-counter"))
   .settings(
     agentParams := "-w g-counter --node-count 1 --time-limit 3 --rate 3",
     testParams := "-w g-counter --node-count 3 --rate 100 --time-limit 20 --nemesis partition"
@@ -86,7 +86,7 @@ lazy val `grow-only-counter` = project
 
 // Challenge #5a: Single-Node Kafka-Style Log
 lazy val `kafka-style-log` = project
-  .in(file("kafka-style-log"))
+  .in(file("5a-kafka-style-log"))
   .settings(
     agentParams := "-w kafka --node-count 1 --concurrency 2n --time-limit 5 --rate 3",
     testParams := "-w kafka --node-count 1 --concurrency 2n --time-limit 20 --rate 1000"
@@ -96,7 +96,7 @@ lazy val `kafka-style-log` = project
 
 // Challenge #5b: Multi-Node Kafka-Style Log
 lazy val `multi-node-kafka-style-log` = project
-  .in(file("multi-node-kafka-style-log"))
+  .in(file("5b-multi-node-kafka-style-log"))
   .settings(
     agentParams := "-w kafka --node-count 1 --concurrency 2n --time-limit 5 --rate 3",
     testParams := "-w kafka --node-count 2 --concurrency 2n --time-limit 20 --rate 1000"
@@ -106,7 +106,7 @@ lazy val `multi-node-kafka-style-log` = project
 
 // Challenge #5c: Efficient Kafka-Style Log
 lazy val `efficient-kafka-style-log` = project
-  .in(file("efficient-kafka-style-log"))
+  .in(file("5c-efficient-kafka-style-log"))
   .settings(
     agentParams := "-w kafka --node-count 1 --concurrency 2n --time-limit 5 --rate 3",
     testParams := "-w kafka --node-count 2 --concurrency 2n --time-limit 20 --rate 1000"
@@ -116,7 +116,7 @@ lazy val `efficient-kafka-style-log` = project
 
 // Challenge #6a: Single-Node, Totally-Available Transactions
 lazy val `single-node-totally-available-transactions` = project
-  .in(file("single-node-totally-available-transactions"))
+  .in(file("6a-single-node-totally-available-transactions"))
   .settings(
     agentParams := "-w txn-rw-register --node-count 1 --time-limit 5 --rate 3 --concurrency 2n --consistency-models read-uncommitted --availability total",
     testParams := "-w txn-rw-register --node-count 1 --time-limit 20 --rate 1000 --concurrency 2n --consistency-models read-uncommitted --availability total"
@@ -126,7 +126,7 @@ lazy val `single-node-totally-available-transactions` = project
 
 // Challenge #6b: Totally-Available, Read Uncommitted Transactions
 lazy val `totally-available-read-uncommitted-transactions` = project
-  .in(file("totally-available-read-uncommitted-transactions"))
+  .in(file("6b-totally-available-read-uncommitted-transactions"))
   .settings(
     agentParams := "-w txn-rw-register --node-count 1 --concurrency 2n --time-limit 5 --rate 3 --consistency-models read-uncommitted  --availability total",
     testParams := "-w txn-rw-register --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted --availability total --nemesis partition"
@@ -136,7 +136,7 @@ lazy val `totally-available-read-uncommitted-transactions` = project
 
 // Challenge #6c: Totally-Available, Read Committed Transactions
 lazy val `totally-available-read-committed-transactions` = project
-  .in(file("totally-available-read-committed-transactions"))
+  .in(file("6c-totally-available-read-committed-transactions"))
   .settings(
     agentParams := "-w txn-rw-register --node-count 1 --concurrency 2n --time-limit 5 --rate 3 --consistency-models read-committed --availability total",
     testParams := "-w txn-rw-register --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-committed --availability total --nemesis partition"
