@@ -10,25 +10,38 @@ object Main extends MaelstromNode {
 
   override val configure: NodeConfig = NodeConfig.withLogLevelDebug
 
-  private def readDatabase = {
+  private type Cache = Ref[Map[NodeId, Long]]
+
+  private def updateCache(nodeId: NodeId, value: Long) =
     for
+      cache <- ZIO.service[Cache]
+      _ <- cache.update(currentCache => currentCache.updated(nodeId, value))
+    yield ()
+
+  private def getCache(nodeId: NodeId) =
+    ZIO.serviceWithZIO[Cache](_.get.map(_.getOrElse(nodeId, 0L)))
+      .tap(value => ZIO.logDebug(s"fetched $nodeId from cache with value $value"))
+
+  private def readDatabase = for
       me <- MaelstromRuntime.me
       count <- SeqKv
-        .read[Long](me, 250.millis)
+        .read[Long](me, 30.millis)
         .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
           ZIO.succeed(0L)
         }
-        .tapError(e => logError(s"failed to read key $me from seq-kv. error: $e"))
+        .tapBoth(e => logError(s"failed to read key $me from seq-kv. error: $e"), updateCache(me, _))
+        .orElse(getCache(me))
     yield count
-  }
 
-  private def fetchFromNode(remote: NodeId): ZIO[MessageSender, AskError, Long] =
+  private def fetchFromNode(remote: NodeId): ZIO[Cache & MessageSender, Nothing, Long] =
     remote
-      .ask[GetOk](Get(), 300.millis)
+      .ask[GetOk](Get(), 30.millis)
       .map(_.value)
-      .tapError(e => logWarning(s"an attempt to read from $remote failed with error: $e"))
-      .retryN(5)
-      .tapError(e => logError(s"failed to read from $remote. error: $e"))
+      .tapBoth(
+        e => logWarning(s"failed to read from $remote. error: $e"),
+        value => updateCache(remote, value)
+      )
+      .orElse(getCache(remote))
 
   private def makeErrorReply(askError: AskError) = askError match
     case Timeout(downstreamRequestId: MessageId, downstreamAddress: NodeId, _) =>
@@ -53,22 +66,14 @@ object Main extends MaelstromNode {
         .zipRight(reply(AddOk()))
         .ignore
 
-    case Get() =>
-      readDatabase
-        .foldZIO(
-          error => logError(s"failed to read key $me from database. error: $error") *> reply(makeErrorReply(error)),
-          count => reply(GetOk(count))
-        )
+    case Get() => readDatabase.flatMap(x => reply(GetOk(x)))
 
     case Read() =>
       val total = for
         othersTotalFiber <- ZIO.mergeAllPar(others.map(fetchFromNode))(0L)(_ + _).forkScoped
-        myValue <- readDatabase.retryN(3)
+        myValue <- readDatabase
         othersTotal <- othersTotalFiber.join
       yield myValue + othersTotal
-      total.foldZIO(
-        error => reply(makeErrorReply(error)),
-        count => reply(ReadOk(count))
-      )
-  }
+      total.flatMap(count => reply(ReadOk(count)))
+  }.provideSome[MaelstromRuntime & Scope](ZLayer(Ref.make(Map.empty[NodeId, Long])))
 }
