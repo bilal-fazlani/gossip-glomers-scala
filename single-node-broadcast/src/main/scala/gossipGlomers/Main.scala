@@ -18,13 +18,13 @@ object Main extends MaelstromNode {
     def addNumber(n: Int) = ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(n)))
 
   val handler = receive[InputMessage] {
-    case Broadcast(number, msg_id) =>
-      State.addNumber(number) *> reply(BroadcastOk(msg_id))
+    case Broadcast(number) =>
+      State.addNumber(number) *> reply(BroadcastOk())
 
-    case Read(msg_id) =>
-      State.getNumbers.flatMap(nums => reply(ReadOk(msg_id, nums)))
+    case Read() =>
+      State.getNumbers.flatMap(nums => reply(ReadOk(nums)))
 
-    case Topology(_, msg_id) => reply(TopologyOk(msg_id))
+    case Topology(_) => reply(TopologyOk())
   }
 
   def program = handler.provideSome[MaelstromRuntime](State.make)

@@ -9,25 +9,23 @@ import com.bilalfazlani.zioMaelstrom.*
 sealed trait InputMessage derives JsonCodec
 
 @jsonHint("broadcast")
-case class Broadcast(message: Int, msg_id: MessageId) extends InputMessage, NeedsReply
+case class Broadcast(message: Int) extends InputMessage
 
 @jsonHint("read")
-case class Read(msg_id: MessageId) extends InputMessage, NeedsReply
+case class Read() extends InputMessage
 
 @jsonHint("topology")
-case class Topology(topology: Map[NodeId, Set[NodeId]], msg_id: MessageId) extends InputMessage, NeedsReply
+case class Topology(topology: Map[NodeId, Set[NodeId]]) extends InputMessage
 
 // Bi-directional Messages
 
 @jsonHint("gossip")
-case class Gossip(messages: Set[Int], `type`: String = "gossip") extends InputMessage, Sendable derives JsonCodec
+case class Gossip(messages: Set[Int]) extends InputMessage derives JsonCodec
 
 // Out Messages
 
-case class BroadcastOk(in_reply_to: MessageId, `type`: String = "broadcast_ok") extends Reply, Sendable
-    derives JsonCodec
+case class BroadcastOk() derives JsonCodec
 
-case class ReadOk(in_reply_to: MessageId, messages: Set[Int], `type`: String = "read_ok") extends Reply, Sendable
-    derives JsonCodec
+case class ReadOk(messages: Set[Int]) derives JsonCodec
 
-case class TopologyOk(in_reply_to: MessageId, `type`: String = "topology_ok") extends Reply, Sendable derives JsonCodec
+case class TopologyOk() derives JsonCodec

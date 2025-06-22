@@ -12,41 +12,30 @@ sealed trait FollowerMessage derives JsonCodec
 sealed trait LeaderMessage derives JsonCodec
 
 @jsonHint("broadcast")
-case class Broadcast(message: Int, msg_id: MessageId) extends FollowerMessage, LeaderMessage, NeedsReply
+case class Broadcast(message: Int) extends FollowerMessage, LeaderMessage
 
 @jsonHint("read")
-case class Read(msg_id: MessageId) extends FollowerMessage, LeaderMessage, NeedsReply
+case class Read() extends FollowerMessage, LeaderMessage
 
 @jsonHint("topology")
-case class Topology(topology: Map[NodeId, Set[NodeId]], msg_id: MessageId)
-    extends FollowerMessage,
-      LeaderMessage,
-      NeedsReply
+case class Topology(topology: Map[NodeId, Set[NodeId]]) extends FollowerMessage, LeaderMessage
 
 // In/Out Messages
 
 @jsonHint("report")
-case class Report(numbers: Set[Int], msg_id: MessageId, `type`: String = "report")
-    extends LeaderMessage,
-      Sendable,
-      NeedsReply derives JsonCodec
+case class Report(numbers: Set[Int]) extends LeaderMessage derives JsonCodec
 
 @jsonHint("update")
-case class Update(numbers: Set[Int], msg_id: MessageId, `type`: String = "update")
-    extends FollowerMessage,
-      Sendable,
-      NeedsReply derives JsonCodec
+case class Update(numbers: Set[Int]) extends FollowerMessage derives JsonCodec
 
 // Out Messages
 
-case class BroadcastOk(in_reply_to: MessageId, `type`: String = "broadcast_ok") extends Reply, Sendable
-    derives JsonCodec
+case class BroadcastOk() derives JsonCodec
 
-case class ReadOk(in_reply_to: MessageId, messages: Set[Int], `type`: String = "read_ok") extends Reply, Sendable
-    derives JsonCodec
+case class ReadOk(messages: Set[Int]) derives JsonCodec
 
-case class TopologyOk(in_reply_to: MessageId, `type`: String = "topology_ok") extends Reply, Sendable derives JsonCodec
+case class TopologyOk() derives JsonCodec
 
-case class ReportOk(in_reply_to: MessageId, `type`: String = "report_ok") extends Reply, Sendable derives JsonCodec
+case class ReportOk() derives JsonCodec
 
-case class UpdateOk(in_reply_to: MessageId, `type`: String = "update_ok") extends Reply, Sendable derives JsonCodec
+case class UpdateOk() derives JsonCodec

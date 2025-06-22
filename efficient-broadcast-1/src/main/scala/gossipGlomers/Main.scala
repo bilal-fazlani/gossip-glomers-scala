@@ -3,6 +3,7 @@ package gossipGlomers
 import zio.*
 import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
+import zio.ZIO.{logDebug, logInfo, logError}
 
 object Main extends MaelstromNode {
 
@@ -18,85 +19,76 @@ object Main extends MaelstromNode {
     def addNumber(n: Int): State = copy(numbers = numbers + n)
   }
 
-  def gossipToLeader(leader: NodeId, number: Int) =
+  private def gossipToLeader(leader: NodeId, number: Int) =
     val retryCount = 10
-    (
-      for
-        nextMessageId <- MessageId.next
-        state <- ZIO.serviceWithZIO[Ref[State]](_.get)
-        _ <- leader
-          .ask[GossipOk](Gossip(number, nextMessageId), 2.seconds)
+    leader
+      .ask[GossipOk](Gossip(number), 2.seconds)
+      .retry(Schedule.recurs(retryCount))
+      .tapError(e => logError(s"gossip ask failed after $retryCount retries: ${e}"))
+      .ignore
+
+  private def updateToFollowers(followers: Set[NodeId], numbers: Set[Int]) =
+    val retryCount = 10
+    ZIO.foreachParDiscard(followers) {
+      follower =>
+        follower
+          .ask[UpdateOk](Update(numbers), 2.seconds)
           .retry(Schedule.recurs(retryCount))
-          .tapError(e => logError(s"gossip ask failed after $retryCount retries: ${e}"))
-          .catchAll(_ => ZIO.unit)
-      yield ()
-    ).unit
+          .tapError(e => logError(s"update ask failed after $retryCount retries: ${e}"))
+          .ignore
+    }
 
-  def updateToFollowers(followers: Set[NodeId], numbers: Set[Int]) =
-    val retryCount = 10
-    (
-      for
-        nextMessageId <- MessageId.next
-        state <- ZIO.serviceWithZIO[Ref[State]](_.get)
-        _ <- ZIO.foreachPar(followers) { follower =>
-          follower
-            .ask[UpdateOk](Update(numbers, nextMessageId), 2.seconds)
-            .retry(Schedule.recurs(retryCount))
-            .tapError(e => logError(s"update ask failed after $retryCount retries: ${e}"))
-            .catchAll(_ => ZIO.unit)
-        }
-      yield ()
-    ).unit
-
-  def followerHandler(leader: NodeId) = receive[FollowerMessage] {
-    case Broadcast(number, msg_id) =>
+  private def followerHandler(leader: NodeId) = receive[FollowerMessage] {
+    case Broadcast(number) =>
       ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(number))) *>
-        (reply(BroadcastOk(msg_id)) zipPar gossipToLeader(leader, number))
+        (reply(BroadcastOk()) zipPar gossipToLeader(leader, number))
 
-    case Update(numbers, msgId, _) =>
-      ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumbers(numbers))) *> reply(UpdateOk(msgId))
+    case Update(numbers) =>
+      ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumbers(numbers))) *> reply(UpdateOk())
 
-    case Read(msg_id) =>
-      ZIO.serviceWithZIO[Ref[State]](_.get.flatMap(state => reply(ReadOk(msg_id, state.numbers))))
+    case Read() =>
+      ZIO.serviceWithZIO[Ref[State]](_.get.flatMap(state => reply(ReadOk(state.numbers))))
 
-    case Topology(_, msg_id) => reply(TopologyOk(msg_id))
+    case Topology(_) => reply(TopologyOk())
   }
 
-  def leaderHandler(followers: Set[NodeId]) = receive[LeaderMessage] {
-    case Broadcast(number, msg_id) =>
+  private def leaderHandler(followers: Set[NodeId]) = receive[LeaderMessage] {
+    case Broadcast(number) =>
       ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(number))) *>
-        reply(BroadcastOk(msg_id)) zipPar updateToFollowers(followers, Set(number))
+        reply(BroadcastOk()) zipPar updateToFollowers(followers, Set(number))
 
-    case Gossip(numbers, msg_id, _) =>
+    case Gossip(numbers) =>
       ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumbers(numbers))) *>
-        (reply(GossipOk(msg_id)) zipPar updateToFollowers(followers - src, numbers))
+        (reply(GossipOk()) zipPar updateToFollowers(followers - src, numbers))
 
-    case Read(msg_id) =>
-      ZIO.serviceWithZIO[Ref[State]](_.get.flatMap(state => reply(ReadOk(msg_id, state.numbers))))
+    case Read() =>
+      ZIO.serviceWithZIO[Ref[State]](_.get.flatMap(state => reply(ReadOk(state.numbers))))
 
-    case Topology(_, msg_id) => reply(TopologyOk(msg_id))
+    case Topology(_) => reply(TopologyOk())
   }
 
-  val handler = for
+  private val handler = for
     role <- ZIO.serviceWithZIO[Ref[State]](_.get.map(_.role))
     _ <- role match
       case NodeRole.Leader(followers) => leaderHandler(followers)
       case NodeRole.Follower(leader)  => followerHandler(leader)
   yield ()
 
-  val decideRole =
+  private val decideRole =
     given Ordering[NodeId] = Ordering.by[NodeId, String](_.toString)
     for
       _ <- logDebug("deciding first alphabetical node as leader")
-      others <- getOtherNodeIds
-      myId <- getMyNodeId
-      leader = (others + myId).toSeq.sorted.head
-      leaderInfo = if leader == myId then NodeRole.Leader(others) else NodeRole.Follower(leader)
-      _ <- leaderInfo match
+      others <- MaelstromRuntime.others
+      myId <- MaelstromRuntime.me
+      leader = (others + myId).toSeq.min
+      selfRole = if leader == myId then NodeRole.Leader(others) else NodeRole.Follower(leader)
+      _ <- selfRole match
         case NodeRole.Leader(_)        => logInfo(s"I am the leader ($myId)!")
         case NodeRole.Follower(nodeId) => logInfo(s"leader is $nodeId")
-    yield leaderInfo
+    yield selfRole
 
-  val program =
+  override val program =
     handler.provideSome[MaelstromRuntime](ZLayer.fromZIO(decideRole).flatMap(role => ZLayer.fromZIO(Ref.make(State(role.get)))))
+
+  override val configure: NodeConfig = NodeConfig.withLogLevelDebug.withColoredLog
 }

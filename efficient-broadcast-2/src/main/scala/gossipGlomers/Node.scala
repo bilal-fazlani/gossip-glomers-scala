@@ -1,7 +1,8 @@
 package gossipGlomers
 
-import zio.*
 import com.bilalfazlani.zioMaelstrom.*
+import zio.*
+import zio.ZIO.{logDebug, logInfo}
 
 trait Node:
   def start: ZIO[Ref.Synchronized[State] & MaelstromRuntime & Scope, Nothing, Unit]
@@ -16,8 +17,8 @@ object Node:
     given Ordering[NodeId] = Ordering.by[NodeId, String](_.toString)
     for
       _ <- logDebug("deciding first alphabetical node as leader")
-      others <- getOtherNodeIds
-      myId <- getMyNodeId
+      others <- MaelstromRuntime.others
+      myId <- MaelstromRuntime.me
       leader = (others + myId).toSeq.min
       leaderInfo = if leader == myId then NodeRole.Leader(others) else NodeRole.Follower(leader)
       node <- leaderInfo match

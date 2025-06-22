@@ -9,21 +9,19 @@ import com.bilalfazlani.zioMaelstrom.*
 sealed trait InputMessage derives JsonCodec
 
 @jsonHint("add")
-case class Add(delta: Long, msg_id: MessageId) extends InputMessage, NeedsReply
+case class Add(delta: Long) extends InputMessage
 
 @jsonHint("read")
-case class Read(msg_id: MessageId) extends InputMessage, NeedsReply
+case class Read() extends InputMessage
 
 // In/Out Messages
 @jsonHint("get")
-case class Get(msg_id: MessageId, `type`: String = "get") extends InputMessage, NeedsReply, Sendable derives JsonCodec
+case class Get() extends InputMessage derives JsonCodec
 
 // Out Messages
 
-case class AddOk(in_reply_to: MessageId, `type`: String = "add_ok") extends Reply, Sendable derives JsonCodec
+case class AddOk() derives JsonCodec
 
-case class ReadOk(in_reply_to: MessageId, value: Long, `type`: String = "read_ok") extends Reply, Sendable
-    derives JsonCodec
+case class ReadOk(value: Long) derives JsonCodec
 
-case class GetOk(in_reply_to: MessageId, value: Long, `type`: String = "get_ok") extends Reply, Sendable
-    derives JsonCodec
+case class GetOk(value: Long) derives JsonCodec

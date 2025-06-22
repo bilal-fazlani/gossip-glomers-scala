@@ -1,34 +1,34 @@
 package gossipGlomers
 
-import zio.*
-import zio.json.*
 import com.bilalfazlani.zioMaelstrom.*
+import zio.*
+import zio.ZIO.{logInfo, logWarning}
+import zio.json.*
 
 case class Follower(leader: NodeId) extends Node {
   def start = handleMessages zipPar syncMessages
 
   def handleMessages = receive[FollowerMessage] {
-    case Broadcast(number, msg_id) =>
-      State.addNewNumber(number) *> reply(BroadcastOk(msg_id))
+    case Broadcast(number) =>
+      State.addNewNumber(number) *> reply(BroadcastOk())
 
-    case Update(numbers, msgId, _) =>
-      State.addOldNumbers(numbers) *> reply(UpdateOk(msgId))
+    case Update(numbers) =>
+      State.addOldNumbers(numbers) *> reply(UpdateOk())
 
-    case Read(msg_id) =>
-      State.get.flatMap(state => reply(ReadOk(msg_id, state.oldNumbers ++ state.newNumbers)))
+    case Read() =>
+      State.get.flatMap(state => reply(ReadOk(state.oldNumbers ++ state.newNumbers)))
 
-    case Topology(_, msg_id) => reply(TopologyOk(msg_id))
+    case Topology(_) => reply(TopologyOk())
   }
 
   def syncMessages = State
     .move { state =>
       for
-        nextMessageId <- MessageId.next
-        _ <- leader.ask[ReportOk](Report(state.newNumbers, nextMessageId), 150.millis)
+        _ <- leader.ask[ReportOk](Report(state.newNumbers), 150.millis)
         _ <- logInfo(s"report ${state.newNumbers} to leader")
       yield ()
     }
-    .catchAll(e => logWarn(s"reporting failed: ${e}"))
+    .catchAll(e => logWarning(s"reporting failed: ${e}"))
     .repeat(Schedule.fixed(150.millis).jittered)
     .unit
 }
