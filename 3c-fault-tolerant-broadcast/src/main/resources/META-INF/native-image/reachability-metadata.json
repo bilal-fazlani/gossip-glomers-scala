@@ -1,0 +1,1067 @@
+{
+  "reflection": [
+    {
+      "type": "[Ljava.lang.String;"
+    },
+    {
+      "type": "[Ljava.util.concurrent.ConcurrentLinkedQueue;"
+    },
+    {
+      "type": "[Lmagnolia1.CaseClass$Param;"
+    },
+    {
+      "type": "[Lmagnolia1.SealedTrait$Subtype;"
+    },
+    {
+      "type": "[Lscala.Function0;"
+    },
+    {
+      "type": "[Lscala.PartialFunction;"
+    },
+    {
+      "type": "[Lscala.Tuple2;"
+    },
+    {
+      "type": "[Lzio.Exit;"
+    },
+    {
+      "type": "[Lzio.internal.RingBuffer;"
+    },
+    {
+      "type": "[Lzio.json.JsonDecoder;"
+    },
+    {
+      "type": "[Lzio.json.JsonError$Message;"
+    },
+    {
+      "type": "[Lzio.json.JsonError$ObjectAccess;"
+    },
+    {
+      "type": "[Lzio.json.internal.FieldEncoder;"
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.GenericDetails$",
+      "fields": [
+        {
+          "name": "given_JsonDecoder_GenericDetails$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.GenericMessage$",
+      "fields": [
+        {
+          "name": "given_JsonDecoder_GenericMessage$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.MaelstromInit$",
+      "fields": [
+        {
+          "name": "derived$JsonDecoder$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.MaelstromInitOk$",
+      "fields": [
+        {
+          "name": "derived$JsonEncoder$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.Protocol$package$MessageId$",
+      "fields": [
+        {
+          "name": "given_JsonDecoder_MessageId$lzy1"
+        },
+        {
+          "name": "given_JsonEncoder_MessageId$lzy1"
+        },
+        {
+          "name": "given_JsonFieldDecoder_MessageId$lzy1"
+        },
+        {
+          "name": "given_JsonFieldEncoder_MessageId$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.Protocol$package$MessageSource$",
+      "fields": [
+        {
+          "name": "given_JsonDecoder_MessageSource$lzy1"
+        },
+        {
+          "name": "given_JsonEncoder_MessageSource$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.Protocol$package$NodeId$",
+      "fields": [
+        {
+          "name": "given_JsonDecoder_NodeId$lzy1"
+        },
+        {
+          "name": "given_JsonEncoder_NodeId$lzy1"
+        },
+        {
+          "name": "given_JsonFieldDecoder_NodeId$lzy1"
+        },
+        {
+          "name": "given_JsonFieldEncoder_NodeId$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "com.bilalfazlani.zioMaelstrom.models.Body$$anon$1",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy1"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.BroadcastOk$",
+      "fields": [
+        {
+          "name": "derived$JsonCodec$lzy3"
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.Gossip$",
+      "fields": [
+        {
+          "name": "derived$JsonCodec$lzy2"
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.InputMessage$",
+      "fields": [
+        {
+          "name": "derived$JsonCodec$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.Main",
+      "methods": [
+        {
+          "name": "main",
+          "parameterTypes": [
+            "java.lang.String[]"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.ReadOk$",
+      "fields": [
+        {
+          "name": "derived$JsonCodec$lzy4"
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.TopologyOk$",
+      "fields": [
+        {
+          "name": "derived$JsonCodec$lzy5"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.internal.fundamentals.platform.console.TrivialLogger$Config$",
+      "fields": [
+        {
+          "name": "console$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTag",
+      "fields": [
+        {
+          "name": "basesdb$lzy1"
+        },
+        {
+          "name": "hashcode$lzy1"
+        },
+        {
+          "name": "idb$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTag$ParsedLightTypeTag230Plus",
+      "fields": [
+        {
+          "name": "ref$lzy2"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTagInheritance",
+      "fields": [
+        {
+          "name": "basesdb$lzy1"
+        },
+        {
+          "name": "idb$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTagRef$FullReference",
+      "fields": [
+        {
+          "name": "hashCode$lzy5"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTagRef$IntersectionReference",
+      "fields": [
+        {
+          "name": "hashCode$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTagRef$NameReference",
+      "fields": [
+        {
+          "name": "hashCode$lzy4"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.ClassValue"
+    },
+    {
+      "type": "java.lang.Runtime",
+      "methods": [
+        {
+          "name": "version",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Runtime$Version",
+      "methods": [
+        {
+          "name": "major",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.invoke.VarHandle",
+      "methods": [
+        {
+          "name": "releaseFence",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.net.URLStreamHandler"
+    },
+    {
+      "type": "magnolia1.CallByNeed",
+      "fields": [
+        {
+          "name": "value$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "sun.misc.Signal",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        },
+        {
+          "name": "handle",
+          "parameterTypes": [
+            "sun.misc.Signal",
+            "sun.misc.SignalHandler"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.misc.SignalHandler"
+    },
+    {
+      "type": "sun.misc.URLClassPath"
+    },
+    {
+      "type": "sun.misc.Unsafe",
+      "fields": [
+        {
+          "name": "theUnsafe"
+        }
+      ]
+    },
+    {
+      "type": "zio.Chunk$",
+      "fields": [
+        {
+          "name": "Tags$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.ConfigProvider$",
+      "fields": [
+        {
+          "name": "console$lzy1"
+        },
+        {
+          "name": "consoleProvider$lzy1"
+        },
+        {
+          "name": "defaultProvider$lzy1"
+        },
+        {
+          "name": "env$lzy1"
+        },
+        {
+          "name": "envProvider$lzy1"
+        },
+        {
+          "name": "props$lzy1"
+        },
+        {
+          "name": "propsProvider$lzy1"
+        },
+        {
+          "name": "strIndexRegex$lzy1"
+        },
+        {
+          "name": "tag$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.Executor",
+      "fields": [
+        {
+          "name": "asExecutionContext$lzy1"
+        },
+        {
+          "name": "asExecutionContextExecutorService$lzy1"
+        },
+        {
+          "name": "asJava$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.Runtime$",
+      "fields": [
+        {
+          "name": "zio$RuntimePlatformSpecific$$sharedLoomExecutor$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.Schedule$$anon$29",
+      "fields": [
+        {
+          "name": "initial$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.Semaphore$unsafe$$anon$1",
+      "fields": [
+        {
+          "name": "Reservation$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.System$",
+      "fields": [
+        {
+          "name": "os$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.ZEnvironment",
+      "fields": [
+        {
+          "name": "hashCode$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.ZIO$",
+      "fields": [
+        {
+          "name": "Parallelism$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.ZLayer",
+      "fields": [
+        {
+          "name": "hashCode$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.internal.FiberRuntime",
+      "fields": [
+        {
+          "name": "scope$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.internal.HeadPadding",
+      "fields": [
+        {
+          "name": "headCounter"
+        }
+      ]
+    },
+    {
+      "type": "zio.internal.TailPadding",
+      "fields": [
+        {
+          "name": "tailCounter"
+        }
+      ]
+    },
+    {
+      "type": "zio.internal.UpdateOrderLinkedMap",
+      "fields": [
+        {
+          "name": "iteratorLz$lzy1"
+        },
+        {
+          "name": "reverseIteratorLz$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.internal.UpdateOrderLinkedMap$LzList$Cons",
+      "fields": [
+        {
+          "name": "head$lzy1"
+        },
+        {
+          "name": "tail$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority2$$anon$24",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy23"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy23"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority2$$anon$25",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy24"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy24"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$26",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy25"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy25"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$27",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy26"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy26"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$28",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy27"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy27"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$29",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy28"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy28"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$30",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy29"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy29"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$31",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy30"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy30"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$32",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy31"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy31"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$33",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy32"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy32"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$34",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy33"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy33"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$35",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy34"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy34"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$36",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy35"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy35"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$37",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy36"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy36"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$38",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy37"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy37"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$39",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy38"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy38"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$40",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy39"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy39"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$41",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy40"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy40"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$42",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy41"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy41"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.EncoderLowPriority3$$anon$43",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy42"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy42"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonDecoderDerivation$$anon$4",
+      "fields": [
+        {
+          "name": "namesMap$lzy1"
+        },
+        {
+          "name": "tcs$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$1",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy1"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$10",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy12"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy12"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$11",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy13"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy13"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$12",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy14"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy14"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$13",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy15"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy15"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$14",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy16"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy16"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$15",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy17"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy17"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$3",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy2"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy2"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$4",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy3"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy3"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$5",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy7"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy7"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$6",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy8"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy8"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$7",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy9"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy9"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$8",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy10"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy10"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoder$$anon$9",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy11"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy11"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoderDerivation$$anon$24",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy1"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy1"
+        },
+        {
+          "name": "fields$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.JsonEncoderDerivation$$anon$32",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy4"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy4"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$$anon$3",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy7"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy7"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Arr$",
+      "fields": [
+        {
+          "name": "arrd$lzy1"
+        },
+        {
+          "name": "arre$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Arr$$anon$7",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy2"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy2"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Num$$anon$13",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy5"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy5"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Obj",
+      "fields": [
+        {
+          "name": "keys$lzy1"
+        },
+        {
+          "name": "values$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Obj$",
+      "fields": [
+        {
+          "name": "objd$lzy1"
+        },
+        {
+          "name": "obje$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Obj$$anon$5",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy1"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.ast.Json$Str$$anon$11",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy4"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy4"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.macros$package$",
+      "fields": [
+        {
+          "name": "caseObjectEncoder$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.json.macros$package$$anon$33",
+      "fields": [
+        {
+          "name": "encodeJsonArrayPipeline$lzy5"
+        },
+        {
+          "name": "encodeJsonLinesPipeline$lzy5"
+        }
+      ]
+    },
+    {
+      "type": "zio.package$",
+      "fields": [
+        {
+          "name": "zio$VersionSpecific$$BoxedBool$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.stream.ZStream$",
+      "fields": [
+        {
+          "name": "Connection$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "zio.stream.ZStream$Signal$3$",
+      "fields": [
+        {
+          "name": "End$lzy1"
+        }
+      ]
+    },
+    {
+      "type": {
+        "proxy": [
+          "sun.misc.SignalHandler"
+        ]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "glob": "META-INF/services/java.lang.System$LoggerFinder"
+    },
+    {
+      "glob": "META-INF/services/java.time.zone.ZoneRulesProvider"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/bootstrap-jar-resources"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/bootstrap-jar-resources-1"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/bootstrap-jar-urls"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/bootstrap-jar-urls-1"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/bootstrap.properties"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/set-python-jep-properties"
+    },
+    {
+      "glob": "coursier/bootstrap/launcher/set-python-properties"
+    }
+  ],
+  "bundles": [],
+  "jni": [
+    {
+      "type": "java.lang.Boolean",
+      "methods": [
+        {
+          "name": "getBoolean",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    }
+  ]
+}

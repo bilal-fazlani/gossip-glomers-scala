@@ -198,14 +198,14 @@ lazy val commonSettings = Seq(
                                 |
                                 |maelstrom test --bin $$(dirname "$$0")/${name.value}.jar ${testParams.value}
                                 |""".stripMargin
-    val p = target.value / "testjar.sh"
+    val p = target.value / "jvm-simulation.sh"
     io.IO.write(p, scriptContents)
     io.IO.chmod("rwxr-----", p)
   },
   maelstromRunAgent := {
     bootstrap.value
-    exec("maelstrom test --bin run.sh " + agentParams.value, name.value)
-    stopNativeImageAgent(name.value)
+    exec("maelstrom test --bin run.sh " + agentParams.value, baseDirectory.value, name.value)
+    stopNativeImageAgent(baseDirectory.value)
   },
   usefulTasks := Seq(
     UsefulTask(
@@ -229,7 +229,7 @@ lazy val commonSettings = Seq(
                             |
                             |maelstrom test --bin $$(dirname "$$0")/${name.value}-$platformSuffix ${testParams.value}
                             |""".stripMargin
-    val p = target.value / "test.sh"
+    val p = target.value / "native-simulation.sh"
     io.IO.write(p, scriptContents)
     io.IO.chmod("rwxr-----", p)
   }
@@ -244,24 +244,23 @@ lazy val bootstrap = taskKey[Unit]("Create a fat jar file")
 lazy val maelstromRunAgent =
   taskKey[Unit]("run maelstrom simulation to generate graalvm agent configuration")
 
-def exec(str: String, name: String) = {
+def exec(str: String, projectDir: File, projectName: String) = {
   val exitCode = Process(
     str,
     file("."),
-    "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-    "PROJECT_NAME" -> name
+    "PROJECT_DIR" -> projectDir.toPath.toAbsolutePath.toString,
+    "PROJECT_NAME" -> projectName
   ).!
   if (exitCode != 0) {
     throw new Exception(s"Failed to run $str")
   }
 }
 
-def stopNativeImageAgent(name: String) = {
+def stopNativeImageAgent(projectDir: File) = {
   Process(
     "sh stop.sh",
     file("."),
-    "BASE_PATH" -> file("").toPath.toAbsolutePath.toString,
-    "PROJECT_NAME" -> name
+    "PROJECT_DIR" -> projectDir.toPath.toAbsolutePath.toString,
   ).!!
 }
 
