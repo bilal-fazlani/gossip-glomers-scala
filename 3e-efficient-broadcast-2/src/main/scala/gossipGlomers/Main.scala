@@ -11,8 +11,8 @@ object Main extends MaelstromNode {
   override val configure: NodeConfig = NodeConfig.withLogLevelDebug.withColoredLog
 
   def program = Node.start
-    .provideSome[MaelstromRuntime & Scope](
+    .provideSome[MaelstromRuntime](
       Node.live,
-      ZLayer.fromZIO(Ref.Synchronized.make(State()))
+      ZLayer.fromZIO(Ref.Synchronized.make(State())),
     )
 }

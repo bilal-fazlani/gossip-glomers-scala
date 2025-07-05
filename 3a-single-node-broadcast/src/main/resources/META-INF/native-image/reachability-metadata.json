@@ -56,6 +56,14 @@
       ]
     },
     {
+      "type": "com.bilalfazlani.zioMaelstrom.JsonConfig$package$",
+      "fields": [
+        {
+          "name": "jsonConfig$lzy1"
+        }
+      ]
+    },
+    {
       "type": "com.bilalfazlani.zioMaelstrom.MaelstromInit$",
       "fields": [
         {
@@ -85,17 +93,6 @@
         },
         {
           "name": "given_JsonFieldEncoder_MessageId$lzy1"
-        }
-      ]
-    },
-    {
-      "type": "com.bilalfazlani.zioMaelstrom.Protocol$package$MessageSource$",
-      "fields": [
-        {
-          "name": "given_JsonDecoder_MessageSource$lzy1"
-        },
-        {
-          "name": "given_JsonEncoder_MessageSource$lzy1"
         }
       ]
     },
@@ -151,6 +148,14 @@
           "parameterTypes": [
             "java.lang.String[]"
           ]
+        }
+      ]
+    },
+    {
+      "type": "gossipGlomers.Main$",
+      "fields": [
+        {
+          "name": "given_Tag_$amp$lzy1"
         }
       ]
     },

@@ -5,7 +5,7 @@ import zio.*
 import zio.ZIO.{logDebug, logInfo}
 
 trait Node:
-  def start: ZIO[Ref.Synchronized[State] & MaelstromRuntime & Scope, Nothing, Unit]
+  def start: ZIO[Ref.Synchronized[State] & MaelstromRuntime, Nothing, Unit]
 
 object Node:
 

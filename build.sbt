@@ -1,7 +1,7 @@
 import sbtwelcome.*
 import scala.sys.process.*
 
-val ZIO_MAELSTROM_VERSION = "2.2.0+10-ca9a3d28-SNAPSHOT"
+val ZIO_MAELSTROM_VERSION = "3.0.0-beta2"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 // Challenge #1: Echo

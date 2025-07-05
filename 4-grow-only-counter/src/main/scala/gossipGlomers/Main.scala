@@ -15,23 +15,24 @@ object Main extends MaelstromNode {
   private def updateCache(nodeId: NodeId, value: Long) =
     for
       cache <- ZIO.service[Cache]
-      _ <- cache.update(currentCache => currentCache.updated(nodeId, value))
+      _     <- cache.update(currentCache => currentCache.updated(nodeId, value))
     yield ()
 
   private def getCache(nodeId: NodeId) =
-    ZIO.serviceWithZIO[Cache](_.get.map(_.getOrElse(nodeId, 0L)))
+    ZIO
+      .serviceWithZIO[Cache](_.get.map(_.getOrElse(nodeId, 0L)))
       .tap(value => ZIO.logDebug(s"fetched $nodeId from cache with value $value"))
 
   private def readDatabase = for
-      me <- MaelstromRuntime.me
-      count <- SeqKv
-        .read[Long](me, 30.millis)
-        .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
-          ZIO.succeed(0L)
-        }
-        .tapBoth(e => logError(s"failed to read key $me from seq-kv. error: $e"), updateCache(me, _))
-        .orElse(getCache(me))
-    yield count
+    me <- MaelstromRuntime.me
+    count <- SeqKv
+      .read[Long](me, 30.millis)
+      .catchSome { case Error(ErrorCode.KeyDoesNotExist, _) =>
+        ZIO.succeed(0L)
+      }
+      .tapBoth(e => logError(s"failed to read key $me from seq-kv. error: $e"), updateCache(me, _))
+      .orElse(getCache(me))
+  yield count
 
   private def fetchFromNode(remote: NodeId): ZIO[Cache & MessageSender, Nothing, Long] =
     remote
@@ -55,25 +56,30 @@ object Main extends MaelstromNode {
   // noinspection TypeAnnotation
   val program = receive[InputMessage] {
     case Add(delta) =>
-      SeqKv
-        .update[NodeId, Long](me, 300.millis) {
-          case Some(currentValue) => currentValue + delta
-          case None               => delta
-        }
-        .tapError(e => logWarning(s"an attempt to add key $me failed with error: $e"))
-        .retryN(5)
-        .tapError(e => logError(s"failed to add key $me all attempts exhausted. error: $e") *> reply(makeErrorReply(e)))
-        .zipRight(reply(AddOk()))
-        .ignore
+      MaelstromRuntime.me.flatMap(me =>
+        SeqKv
+          .update[NodeId, Long](me, 300.millis) {
+            case Some(currentValue) => currentValue + delta
+            case None               => delta
+          }
+          .tapError(e => logWarning(s"an attempt to add key $me failed with error: $e"))
+          .retryN(5)
+          .tapError(e =>
+            logError(s"failed to add key $me all attempts exhausted. error: $e") *> reply(makeErrorReply(e))
+          )
+          .zipRight(reply(AddOk()))
+          .ignore
+      )
 
     case Get() => readDatabase.flatMap(x => reply(GetOk(x)))
 
     case Read() =>
       val total = for
+        others           <- MaelstromRuntime.others
         othersTotalFiber <- ZIO.mergeAllPar(others.map(fetchFromNode))(0L)(_ + _).forkScoped
-        myValue <- readDatabase
-        othersTotal <- othersTotalFiber.join
+        myValue          <- readDatabase
+        othersTotal      <- othersTotalFiber.join
       yield myValue + othersTotal
       total.flatMap(count => reply(ReadOk(count)))
-  }.provideSome[MaelstromRuntime & Scope](ZLayer(Ref.make(Map.empty[NodeId, Long])))
+  }.provideSome[MaelstromRuntime](ZLayer(Ref.make(Map.empty[NodeId, Long])))
 }

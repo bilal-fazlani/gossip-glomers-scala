@@ -58,8 +58,11 @@ object Main extends MaelstromNode {
         reply(BroadcastOk()) zipPar updateToFollowers(followers, Set(number))
 
     case Gossip(numbers) =>
-      ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumbers(numbers))) *>
-        (reply(GossipOk()) zipPar updateToFollowers(followers - src, numbers))
+      for
+        _ <- ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumbers(numbers)))
+        src <- MaelstromRuntime.src
+        _ <- reply(GossipOk()) zipPar updateToFollowers(followers - src, numbers)
+      yield ()
 
     case Read() =>
       ZIO.serviceWithZIO[Ref[State]](_.get.flatMap(state => reply(ReadOk(state.numbers))))

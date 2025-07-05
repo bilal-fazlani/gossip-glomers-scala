@@ -16,9 +16,6 @@
       "type": "[Lscala.Function0;"
     },
     {
-      "type": "[Lscala.PartialFunction;"
-    },
-    {
       "type": "[Lscala.Tuple2;"
     },
     {
@@ -75,6 +72,14 @@
       ]
     },
     {
+      "type": "com.bilalfazlani.zioMaelstrom.JsonConfig$package$",
+      "fields": [
+        {
+          "name": "jsonConfig$lzy1"
+        }
+      ]
+    },
+    {
       "type": "com.bilalfazlani.zioMaelstrom.MaelstromInit$",
       "fields": [
         {
@@ -104,17 +109,6 @@
         },
         {
           "name": "given_JsonFieldEncoder_MessageId$lzy1"
-        }
-      ]
-    },
-    {
-      "type": "com.bilalfazlani.zioMaelstrom.Protocol$package$MessageSource$",
-      "fields": [
-        {
-          "name": "given_JsonDecoder_MessageSource$lzy1"
-        },
-        {
-          "name": "given_JsonEncoder_MessageSource$lzy1"
         }
       ]
     },
@@ -158,15 +152,7 @@
       "type": "gossipGlomers.AddOk$",
       "fields": [
         {
-          "name": "derived$JsonCodec$lzy3"
-        }
-      ]
-    },
-    {
-      "type": "gossipGlomers.Get$",
-      "fields": [
-        {
-          "name": "derived$JsonCodec$lzy2"
+          "name": "derived$JsonCodec$lzy1"
         }
       ]
     },
@@ -174,7 +160,7 @@
       "type": "gossipGlomers.InputMessage$",
       "fields": [
         {
-          "name": "derived$JsonCodec$lzy1"
+          "name": "derived$JsonDecoder$lzy1"
         }
       ]
     },
@@ -190,10 +176,18 @@
       ]
     },
     {
+      "type": "gossipGlomers.Main$",
+      "fields": [
+        {
+          "name": "given_Tag_$amp$lzy1"
+        }
+      ]
+    },
+    {
       "type": "gossipGlomers.ReadOk$",
       "fields": [
         {
-          "name": "derived$JsonCodec$lzy4"
+          "name": "derived$JsonCodec$lzy2"
         }
       ]
     },
@@ -239,10 +233,38 @@
       ]
     },
     {
+      "type": "izumi.reflect.macrortti.LightTypeTagRef$FullReference",
+      "fields": [
+        {
+          "name": "hashCode$lzy5"
+        }
+      ]
+    },
+    {
       "type": "izumi.reflect.macrortti.LightTypeTagRef$IntersectionReference",
       "fields": [
         {
           "name": "hashCode$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "izumi.reflect.macrortti.LightTypeTagRef$Lambda",
+      "fields": [
+        {
+          "name": "normalizedOutput$lzy1"
+        },
+        {
+          "name": "normalizedParams$lzy1"
+        },
+        {
+          "name": "paramRefs$lzy1"
+        },
+        {
+          "name": "referenced$lzy1"
+        },
+        {
+          "name": "someArgumentsReferenced$lzy1"
         }
       ]
     },
@@ -879,17 +901,6 @@
         },
         {
           "name": "fields$lzy1"
-        }
-      ]
-    },
-    {
-      "type": "zio.json.JsonEncoderDerivation$$anon$32",
-      "fields": [
-        {
-          "name": "encodeJsonArrayPipeline$lzy4"
-        },
-        {
-          "name": "encodeJsonLinesPipeline$lzy4"
         }
       ]
     },

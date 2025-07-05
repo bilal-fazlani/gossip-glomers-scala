@@ -24,7 +24,7 @@ object Main extends MaelstromNode {
 
     case Read() => State.getNumbers.flatMap(nums => reply(ReadOk(nums)))
 
-    case Topology(topology) => reply(TopologyOk()) *> startGossip(topology(me))
+    case Topology(topology) => reply(TopologyOk()) *> MaelstromRuntime.me.flatMap(me => startGossip(topology(me)))
 
     case Gossip(messages) => State.addNumbers(messages)
   }
@@ -35,5 +35,5 @@ object Main extends MaelstromNode {
       _ <- ZIO.foreachPar(neighbours)(_ send Gossip(nums))
     } yield ()).repeat(Schedule.fixed(300.millis)).forkScoped.unit
 
-  def program = handler.provideSome[MaelstromRuntime & Scope](State.make)
+  def program = handler.provideSome[MaelstromRuntime](State.make)
 }

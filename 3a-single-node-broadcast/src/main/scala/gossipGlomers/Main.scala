@@ -2,7 +2,7 @@ package gossipGlomers
 
 import zio.*
 import zio.json.*
-import com.bilalfazlani.zioMaelstrom.*
+import com.bilalfazlani.zioMaelstrom.{*, given}
 
 object Main extends MaelstromNode {
 
@@ -12,7 +12,7 @@ object Main extends MaelstromNode {
     def addNumber(n: Int): State = copy(numbers = numbers + n)
   }
 
-  object State:
+  private object State:
     def make = ZLayer.fromZIO(Ref.make(State()))
     def getNumbers = ZIO.serviceWithZIO[Ref[State]](_.get.map(_.numbers))
     def addNumber(n: Int) = ZIO.serviceWithZIO[Ref[State]](_.update(_.addNumber(n)))
